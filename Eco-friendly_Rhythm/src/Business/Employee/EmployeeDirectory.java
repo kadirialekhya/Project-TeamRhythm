@@ -4,6 +4,7 @@
  */
 package Business.Employee;
 
+import Business.Role.Role;
 import java.util.ArrayList;
 
 /**
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 
 public class EmployeeDirectory {
     
-    private ArrayList<Employee> employeeList;
+     private ArrayList<Employee> employeeList;
 
     public EmployeeDirectory() {
         employeeList = new ArrayList();
@@ -29,5 +30,9 @@ public class EmployeeDirectory {
         employee.setName(name);
         employeeList.add(employee);
         return employee;
+    }
+    
+    public void removeEmployee(Employee name){
+        employeeList.remove(name);
     }
 }
