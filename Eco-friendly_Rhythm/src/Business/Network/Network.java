@@ -6,6 +6,7 @@
 package Business.Network;
 
 import Business.Enterprise.EnterpriseDirectory;
+import Business.UserAccount.UserAccountDirectory;
 
 /**
  * @author Alekhya
@@ -15,10 +16,56 @@ import Business.Enterprise.EnterpriseDirectory;
 
 public class Network {
     private String name;
+    private String city;
+    private String state;
+    private String country;
+    private UserAccountDirectory userAccountDirectory;
     private EnterpriseDirectory enterpriseDirectory;
+
+    public String getCity() {
+        return city;
+    }
+
+    public EnterpriseDirectory getEnterpriseDirectory() {
+        return enterpriseDirectory;
+    }
+
+    public void setEnterpriseDirectory(EnterpriseDirectory enterpriseDirectory) {
+        this.enterpriseDirectory = enterpriseDirectory;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+    
+     public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
     
     public Network(){
-        enterpriseDirectory=new EnterpriseDirectory();
+        userAccountDirectory=new UserAccountDirectory();
+        enterpriseDirectory = new EnterpriseDirectory();
+    }
+
+    public Network(String name, String city, String state, String country, UserAccountDirectory uad, EnterpriseDirectory ed) {
+        this.name = name;
+        this.city = city;
+        this.state = state;
+        this.country = country;
+        this.userAccountDirectory=uad;
+        this.enterpriseDirectory = ed;
     }
     public String getName() {
         return name;
@@ -28,8 +75,8 @@ public class Network {
         this.name = name;
     }
 
-    public EnterpriseDirectory getEnterpriseDirectory() {
-        return enterpriseDirectory;
+    public UserAccountDirectory getUserAccountDirectory() {
+        return userAccountDirectory;
     }
     
     @Override
