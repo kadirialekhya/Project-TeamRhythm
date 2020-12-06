@@ -7,6 +7,7 @@ package Business.UserAccount;
 import Business.Employee.Employee;
 import Business.Role.Role;
 import Business.WorkQueue.WorkQueue;
+import java.io.File;
 
 /**
  * @author Alekhya
@@ -18,15 +19,22 @@ public class UserAccount {
     
     private String username;
     private String password;
+    private String contactNumber;
     private Employee employee;
     private Role role;
     private WorkQueue workQueue;
 
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+    
     public UserAccount() {
         workQueue = new WorkQueue();
     }
-    
-    
     
     public String getUsername() {
         return username;
@@ -64,13 +72,9 @@ public class UserAccount {
         return workQueue;
     }
 
-    
-    
     @Override
     public String toString() {
         return username;
     }
-    
-    
     
 }
