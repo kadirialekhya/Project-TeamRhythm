@@ -18,8 +18,6 @@ public abstract class Enterprise extends Organization{
     
     private EnterpriseType enterpriseType;
     private OrganizationDirectory organizationDirectory;
-
-   
     
     public enum EnterpriseType{
         NGO("NGO"),
