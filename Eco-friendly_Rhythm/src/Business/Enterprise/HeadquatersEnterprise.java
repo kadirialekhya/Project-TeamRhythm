@@ -6,7 +6,11 @@
 package Business.Enterprise;
 
 import Business.Enterprise.Enterprise.EnterpriseType;
+import Business.Role.CareTaker;
+import Business.Role.HeadquaterManager;
+import Business.Role.Investor;
 import Business.Role.Role;
+import Business.Role.Supplier;
 import java.util.ArrayList;
 
 /**
@@ -23,7 +27,12 @@ public class HeadquatersEnterprise extends Enterprise{
 
     @Override
     public ArrayList<Role> getSupportedRole() {
-        return null;
+       ArrayList<Role> roles = new ArrayList();
+        roles.add(new Supplier());
+        roles.add(new Investor());
+        roles.add(new HeadquaterManager());
+        roles.add(new CareTaker());
+        return roles;
     }
     
 }
