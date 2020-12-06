@@ -1,6 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package Business.Role;
@@ -11,9 +10,8 @@ import Business.Enterprise.Enterprise;
 import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import java.awt.CardLayout;
-import javax.swing.JPanel;
 import userinterface.AdministrativeRole.AdminWorkAreaJPanel;
-import userinterface.Corporate.CorporateJPanel;
+import javax.swing.JPanel;
 
 /**
  * @author Alekhya
@@ -21,7 +19,7 @@ import userinterface.Corporate.CorporateJPanel;
  * @author Shalini
  */
 
-public class Corporate extends Role{
+public class AdminRole extends Role{
 
     @Override
     public JPanel createWorkArea(JPanel userProcessContainer, 
@@ -29,11 +27,12 @@ public class Corporate extends Role{
             Organization organization, 
             Enterprise enterprise, 
             EcoSystem business){
-        return new CorporateJPanel(userProcessContainer,business);
-//        userProcessContainer.add("CorporateJPanel",jpanel);
+        return new AdminWorkAreaJPanel(userProcessContainer, account, business);
+//        userProcessContainer.add("AdminWorkAreaJPanel",jpanel);
 //        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
 //        layout.next(userProcessContainer);
 //        jpanel.setVisible(true);
     }
+    
     
 }

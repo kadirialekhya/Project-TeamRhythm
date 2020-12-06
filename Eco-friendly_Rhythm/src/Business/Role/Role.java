@@ -4,6 +4,7 @@
  */
 package Business.Role;
 
+import Business.DB4OUtil.DB4OUtil;
 import Business.EcoSystem;
 import Business.Enterprise.Enterprise;
 import Business.Organization.Organization;
@@ -26,6 +27,7 @@ public abstract class Role {
         University("University"),
          Investor("Investor"),
          CareTaker("CareTaker"),
+         Corporate("Corporate"),
           Informer("Informer"),
           ActiveParticipant("ActiveParticipant"),
           SystemAdminRole("SystemAdminRole"),
