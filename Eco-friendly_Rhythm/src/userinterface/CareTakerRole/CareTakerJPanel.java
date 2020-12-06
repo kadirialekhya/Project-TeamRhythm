@@ -36,7 +36,7 @@ import userinterface.Volunteer.InformerJPanel;
 
 /**
  *
- * @author Am3y
+ * @author Alekhya
  */
 public class CareTakerJPanel extends javax.swing.JPanel {
 
