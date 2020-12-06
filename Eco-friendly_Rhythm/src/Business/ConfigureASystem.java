@@ -1,10 +1,6 @@
 package Business;
 
 import Business.Employee.Employee;
-<<<<<<< HEAD
-import Business.Role.SystemAdmin;
-import Business.UserAccount.UserAccount;
-=======
 import Business.Enterprise.Enterprise;
 import Business.Enterprise.EnterpriseDirectory;
 import Business.Network.Network;
@@ -22,7 +18,6 @@ import Business.UserAccount.UserAccountDirectory;
 import Business.WorkQueue.CordinatorWorkRequest;
 import java.util.ArrayList;
 import java.util.Date;
->>>>>>> c4c0a94... Adding the base files
 
 /**
  * @author Alekhya
@@ -36,22 +31,6 @@ public class ConfigureASystem {
         
         EcoSystem system = EcoSystem.getInstance();
         
-<<<<<<< HEAD
-        //Create a network
-        //create an enterprise
-        //initialize some organizations
-        //have some employees 
-        //create user account
-        
-        
-        Employee employee = system.getEmployeeDirectory().createEmployee("sysadmin");
-        
-        UserAccount ua = system.getUserAccountDirectory().createUserAccount("sysadmin", "sysadmin", employee, new SystemAdmin());
-        
-        return system;
-    }
-    
-=======
         
         //create an enterprise
         //initialize some organizations
@@ -149,5 +128,4 @@ public class ConfigureASystem {
         
         return system;
     }   
->>>>>>> c4c0a94... Adding the base files
 }
