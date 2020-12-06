@@ -4,6 +4,8 @@
  */
 package Business.WorkQueue;
 
+import Business.Employee.Employee;
+import Business.User.User;
 import Business.UserAccount.UserAccount;
 import java.util.Date;
 
@@ -15,39 +17,65 @@ import java.util.Date;
 
 public abstract class WorkRequest {
 
-    private String message;
-    private UserAccount sender;
-    private UserAccount receiver;
+    private Employee coordinatorAssigned;
+    private Employee supplierAssigned;
+    private User user;
     private String status;
+    private User Investorstatus;
+    private User Supplierstatus;    
     private Date requestDate;
-    private Date resolveDate;
+    private String Type;
     
     public WorkRequest(){
         requestDate = new Date();
     }
 
-    public String getMessage() {
-        return message;
+    public Employee getCoordinatorAssigned() {
+        return coordinatorAssigned;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setCoordinatorAssigned(Employee coordinatorAssigned) {
+        this.coordinatorAssigned = coordinatorAssigned;
     }
 
-    public UserAccount getSender() {
-        return sender;
+    public Employee getSupplierAssigned() {
+        return supplierAssigned;
     }
 
-    public void setSender(UserAccount sender) {
-        this.sender = sender;
+    public void setSupplierAssigned(Employee supplierAssigned) {
+        this.supplierAssigned = supplierAssigned;
     }
 
-    public UserAccount getReceiver() {
-        return receiver;
+    public User getUser() {
+        return user;
     }
 
-    public void setReceiver(UserAccount receiver) {
-        this.receiver = receiver;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getInvestorstatus() {
+        return Investorstatus;
+    }
+
+    public void setInvestorstatus(User Investorstatus) {
+        this.Investorstatus = Investorstatus;
+    }
+
+    public User getSupplierstatus() {
+        return Supplierstatus;
+    }
+
+    public void setSupplierstatus(User Supplierstatus) {
+        this.Supplierstatus = Supplierstatus;
+    }
+
+    public String getType() {
+        return Type;
+    }
+
+    public void setType(String Type) {
+        this.Type = Type;
     }
 
     public String getStatus() {
@@ -65,12 +93,9 @@ public abstract class WorkRequest {
     public void setRequestDate(Date requestDate) {
         this.requestDate = requestDate;
     }
-
-    public Date getResolveDate() {
-        return resolveDate;
-    }
-
-    public void setResolveDate(Date resolveDate) {
-        this.resolveDate = resolveDate;
+    
+    @Override
+    public String toString() {
+        return Type;
     }
 }

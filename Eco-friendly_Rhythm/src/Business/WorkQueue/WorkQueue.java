@@ -15,12 +15,18 @@ import java.util.ArrayList;
 public class WorkQueue {
     
     private ArrayList<WorkRequest> workRequestList;
+    private ArrayList<CordinatorWorkRequest> requestList;
 
     public WorkQueue() {
         workRequestList = new ArrayList();
+        requestList = new ArrayList();
     }
 
     public ArrayList<WorkRequest> getWorkRequestList() {
         return workRequestList;
+    }
+    
+     public ArrayList<CordinatorWorkRequest> getRequestList() {
+        return requestList;
     }
 }
