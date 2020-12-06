@@ -5,31 +5,23 @@
  */
 package Business.Organization;
 
+import static Business.Organization.Organization.Type.CareTaker;
 import Business.Role.CareTaker;
 import Business.Role.Role;
-import Business.Role.Supplier;
 import java.util.ArrayList;
-import Business.Role.HeadquaterManager;
-import Business.Role.Investor;
 
 /**
- * @author Alekhya
- * @author Apeksha
- * @author Shalini
+ *
+ * @author Am3y
  */
-
-public class HeadquatersOrganization extends Organization {
-
-    public HeadquatersOrganization() {
-        super(Organization.Type.Headquaters.getValue());
+public class CareTakerOrganization extends Organization{
+     public CareTakerOrganization() {
+        super(Organization.Type.CareTaker.getValue());
     }
 
     @Override
     public ArrayList<Role> getSupportedRole() {
         ArrayList<Role> roles = new ArrayList();
-        roles.add(new Supplier());
-        roles.add(new Investor());
-        roles.add(new HeadquaterManager());
         roles.add(new CareTaker());
         return roles;
     }

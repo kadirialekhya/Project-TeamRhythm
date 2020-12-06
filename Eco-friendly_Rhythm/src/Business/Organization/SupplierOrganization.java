@@ -5,7 +5,7 @@
  */
 package Business.Organization;
 
-import Business.Role.NGO;
+import Business.Role.Supplier;
 import Business.Role.Role;
 import java.util.ArrayList;
 
@@ -16,16 +16,18 @@ import java.util.ArrayList;
  */
 
 public class SupplierOrganization extends Organization {
+    
+    ArrayList<Supplier> supList;
 
    public SupplierOrganization() {
         super(Organization.Type.Supplier.getValue());
+        supList = new ArrayList();
     }
 
     @Override
     public ArrayList<Role> getSupportedRole() {
         ArrayList<Role> roles = new ArrayList();
-        roles.add(new NGO());
+        roles.add(new Supplier());
         return roles;
     }
-    
 }

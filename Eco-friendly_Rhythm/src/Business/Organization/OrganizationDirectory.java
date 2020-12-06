@@ -51,6 +51,10 @@ public class OrganizationDirectory {
             organization = new SupplierOrganization();
             organizationList.add(organization);
         }
+        else if (type.getValue().equals(Type.CareTaker.getValue())){
+            organization = new CareTakerOrganization();
+            organizationList.add(organization);
+        }
         else if (type.getValue().equals(Type.Administrator.getValue())){
             organization = new AdministratorOrganization();
             organizationList.add(organization);

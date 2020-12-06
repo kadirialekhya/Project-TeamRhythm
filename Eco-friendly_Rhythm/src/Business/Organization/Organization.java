@@ -6,6 +6,7 @@ package Business.Organization;
 
 import Business.Employee.EmployeeDirectory;
 import Business.Role.Role;
+import Business.User.UserDirectory;
 import Business.UserAccount.UserAccountDirectory;
 import Business.WorkQueue.WorkQueue;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public abstract class Organization {
     private WorkQueue workQueue;
     private EmployeeDirectory employeeDirectory;
     private UserAccountDirectory userAccountDirectory;
+    private UserDirectory userDirectory;
     private int organizationID;
     private static int counter=0;
     
@@ -34,6 +36,7 @@ public abstract class Organization {
         Government("Government Organization"),
         Supplier("Supplier Organization"),
         Logistic("Logistic Organization"),
+        CareTaker("Care Taker Organization"),
         Administrator("Administrator Organization");
         private String value;
         private Type(String value) {
@@ -59,6 +62,14 @@ public abstract class Organization {
         return userAccountDirectory;
     }
 
+    public UserDirectory getUserDirectory() {
+        return userDirectory;
+    }
+
+    public void setUserDirectory(UserDirectory userDirectory) {
+        this.userDirectory = userDirectory;
+    }
+    
     public int getOrganizationID() {
         return organizationID;
     }

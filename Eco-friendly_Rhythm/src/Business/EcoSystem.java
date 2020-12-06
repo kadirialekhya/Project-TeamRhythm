@@ -5,10 +5,18 @@
  */
 package Business;
 
+<<<<<<< HEAD
+=======
+import Business.Employee.EmployeeDirectory;
+>>>>>>> c4c0a94... Adding the base files
 import Business.Network.Network;
 import Business.Organization.Organization;
 import Business.Role.Role;
 import Business.Role.SystemAdmin;
+<<<<<<< HEAD
+=======
+import Business.User.UserDirectory;
+>>>>>>> c4c0a94... Adding the base files
 import java.util.ArrayList;
 
 /**
@@ -21,6 +29,10 @@ public class EcoSystem extends Organization{
     
     private static EcoSystem business;
     private ArrayList<Network> networkList;
+<<<<<<< HEAD
+=======
+    
+>>>>>>> c4c0a94... Adding the base files
     public static EcoSystem getInstance(){
         if(business==null){
             business=new EcoSystem();
