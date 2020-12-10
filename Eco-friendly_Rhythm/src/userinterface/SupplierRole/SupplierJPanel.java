@@ -11,7 +11,7 @@ import Business.Employee.Employee;
 import Business.Enterprise.Enterprise;
 import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
-import Business.WorkQueue.CordinatorWorkRequest;
+import Business.WorkQueue.InternalWorkRequest;
 import Business.WorkQueue.WorkQueue;
 import Business.WorkQueue.WorkRequest;
 import java.awt.CardLayout;
@@ -21,7 +21,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Am3y
+ * @author alekhya
  */
 public class SupplierJPanel extends javax.swing.JPanel {
 
@@ -137,7 +137,7 @@ public class SupplierJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Select a row");
             return;
         }
-        CordinatorWorkRequest request = (CordinatorWorkRequest) SupTable.getValueAt(selectedRow, 0);
+        InternalWorkRequest request = (InternalWorkRequest) SupTable.getValueAt(selectedRow, 0);
             System.out.println("SP: "+request.getEmployee());
             System.out.println(request.getStatus());
         if (!(request.getStatus().equals("assigned to Supplier"))) {
@@ -160,7 +160,7 @@ public class SupplierJPanel extends javax.swing.JPanel {
         DefaultTableModel dtm = (DefaultTableModel) SupTable.getModel();
         dtm.setRowCount(0);
         System.out.println("s "+supplier.getName());
-        for (CordinatorWorkRequest request : supplier.getUserRequestList()) {
+        for (InternalWorkRequest request : supplier.getEmployeeRequestList()) {
             if (request.getSupplierAssigned().getUserName().equals(supplier.getUserName())) {
                 Object row[] = new Object[5];
                 row[0] = request;
