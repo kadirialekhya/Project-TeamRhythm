@@ -24,6 +24,7 @@ public class UserLogin extends javax.swing.JPanel {
     JPanel userProcessContainer;
     UserAccount user;
 
+
     /**
      * Creates new form UserLogin
      */
