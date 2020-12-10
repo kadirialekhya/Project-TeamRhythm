@@ -6,6 +6,7 @@ package Business.UserAccount;
 
 import Business.Employee.Employee;
 import Business.Role.Role;
+import Business.User.User;
 import Business.WorkQueue.WorkQueue;
 import java.io.File;
 
@@ -21,6 +22,15 @@ public class UserAccount {
     private String password;
     private String contactNumber;
     private Employee employee;
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
     private Role role;
     private WorkQueue workQueue;
 
