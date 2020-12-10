@@ -5,6 +5,9 @@
  */
 package Business.User;
 
+import Business.Network.Network;
+import Business.WorkQueue.PlantationWorkRequest;
+import Business.WorkQueue.SocialWorkRequest;
 import Business.WorkQueue.WorkRequest;
 import java.io.File;
 import java.util.ArrayList;
@@ -12,7 +15,7 @@ import java.util.Date;
 
 /**
  *
- * @author Am3y
+ * @author alekhya
  */
 public class User {
   
@@ -24,8 +27,19 @@ public class User {
     private Date dateOfBirth ;
     private String gender ;
     private String zip ;
+    private Network network;
+
+    public Network getNetwork() {
+        return network;
+    }
+
+    public void setNetwork(Network network) {
+        this.network = network;
+    }
     private File profilePicture;
     private ArrayList<WorkRequest> userRequestList ;
+    private ArrayList<SocialWorkRequest> socialRequestList ;
+    private ArrayList<PlantationWorkRequest> plantationRequestList ;
     private boolean completeProfile = false;
 
     public boolean isCompleteProfile() {
@@ -47,6 +61,8 @@ public class User {
     
     public User() {
         userRequestList = new ArrayList();
+        socialRequestList= new ArrayList();
+                plantationRequestList= new ArrayList();
     }
 
     public ArrayList<WorkRequest> getUserRequestList() {
@@ -129,7 +145,33 @@ public class User {
     
     public  void addUserRequest (WorkRequest  userRequest) {
     
-    userRequestList.add(userRequest);
+        userRequestList.add(userRequest);
+    }
+    
+    public  void addPlantationRequest (PlantationWorkRequest userRequest) {
+    
+        plantationRequestList.add(userRequest);
+    }
+    
+    public  void addSocialRequest (SocialWorkRequest  userRequest) {
+    
+        socialRequestList.add(userRequest);
+    }
+    
+    public ArrayList<SocialWorkRequest> getSocialRequestList() {
+        return socialRequestList;
+    }
+
+    public void setSocialRequestList(ArrayList<SocialWorkRequest> socialRequestList) {
+        this.socialRequestList = socialRequestList;
+    }
+
+    public ArrayList<PlantationWorkRequest> getPlantationRequestList() {
+        return plantationRequestList;
+    }
+
+    public void setPlantationRequestList(ArrayList<PlantationWorkRequest> plantationRequestList) {
+        this.plantationRequestList = plantationRequestList;
     }
      
 }
