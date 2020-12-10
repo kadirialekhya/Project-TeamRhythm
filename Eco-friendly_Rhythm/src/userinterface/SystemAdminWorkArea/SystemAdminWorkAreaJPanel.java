@@ -24,7 +24,7 @@ import javax.swing.tree.DefaultTreeModel;
 
 /**
  *
- * @author MyPC1
+ * @author alekhya
  */
 public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
 
@@ -570,7 +570,7 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
             Network currentNetwork = (Network)cbNetwork.getSelectedItem();
 
             Employee employee = org.getEmployeeDirectory().createEmployee(adminName);
-            UserAccount admin = currentNetwork.getUserAccountDirectory().createUserAccount(userid, password, contact, employee, new AdminRole());
+            UserAccount admin = currentNetwork.getUserAccountDirectory().createEmployeeAccount(userid, password, contact, employee, new AdminRole());
             JOptionPane.showMessageDialog(null, "User " + userid + " is created sucessfully");
 
             txtContact.setText("");
