@@ -8,11 +8,16 @@ package userinterface.CareTakerRole;
 import Business.EcoSystem;
 import Business.Employee.Employee;
 import Business.Enterprise.Enterprise;
+import Business.Enterprise.GovernmentEnterprise;
 import Business.Network.Network;
 import Business.Organization.HeadquatersOrganization;
 import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
-import Business.WorkQueue.CordinatorWorkRequest;
+import Business.WorkQueue.InternalWorkRequest;
+import Business.WorkQueue.NotificationRequest;
+import Business.WorkQueue.PlantationWorkRequest;
+import Business.WorkQueue.SocialWorkRequest;
+import Business.WorkQueue.WorkRequest;
 import java.awt.CardLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -36,7 +41,7 @@ import userinterface.Volunteer.InformerJPanel;
 
 /**
  *
- * @author Alekhya
+ * @author Am3y
  */
 public class CareTakerJPanel extends javax.swing.JPanel {
 
@@ -58,6 +63,8 @@ public class CareTakerJPanel extends javax.swing.JPanel {
         user = userAcount.getEmployee();
         populateCurrentRequestTable();
         populateRequestHistoryTable();
+        populateRequetedMeetingTable();
+        populateConfirmedMeetingTable();
         populateComboBox();
         showInfo();
 
@@ -114,6 +121,14 @@ public class CareTakerJPanel extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         CurrentRequestTable = new javax.swing.JTable();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblrequestMeeting = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+        btnConfirm = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tblMeetings = new javax.swing.JTable();
+        btnPickup = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(0, 102, 102));
 
@@ -500,6 +515,109 @@ public class CareTakerJPanel extends javax.swing.JPanel {
 
         jTabbedPane1.addTab("History", jPanel3);
 
+        tblrequestMeeting.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Organization", "Tree count", "Name", "Date", "Type"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tblrequestMeeting);
+
+        jButton1.setText("Reschedule");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        btnConfirm.setText("Confirm Meeting");
+        btnConfirm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConfirmActionPerformed(evt);
+            }
+        });
+
+        tblMeetings.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Organization", "Tree count", "Name", "Date", "Type"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(tblMeetings);
+
+        btnPickup.setText("Pickup Successful!");
+        btnPickup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPickupActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(159, 159, 159)
+                .addComponent(btnConfirm)
+                .addGap(292, 292, 292))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(72, 72, 72)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 731, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 731, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(368, 368, 368)
+                        .addComponent(btnPickup)))
+                .addContainerGap(92, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(70, 70, 70)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(47, 47, 47)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(btnConfirm))
+                .addGap(35, 35, 35)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(btnPickup)
+                .addContainerGap(43, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Meetings", jPanel4);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -529,12 +647,13 @@ public class CareTakerJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Please select a row");
             return;
         }
-        CordinatorWorkRequest o = (CordinatorWorkRequest) CurrentRequestTable.getValueAt(selectedRow, 0);
+        InternalWorkRequest o = (InternalWorkRequest) CurrentRequestTable.getValueAt(selectedRow, 0);
         if (!o.getStatus().equals("delivered")) {
             JOptionPane.showMessageDialog(null, "This order is not yet delivered by the Supplier!");
             return;
         }
         o.setStatus("order delivered");
+        o.setOverallStatus("Completed");
 
         populateCurrentRequestTable();
         populateRequestHistoryTable();
@@ -547,8 +666,9 @@ public class CareTakerJPanel extends javax.swing.JPanel {
 
         model.setRowCount(0);
 
-        for (CordinatorWorkRequest request : user.getUserRequestList()) {
-            if (!(request.getStatus().equals("order delivered"))) {
+        for (InternalWorkRequest request : user.getEmployeeRequestList()) {
+            System.out.println(request==null);
+            if (!(request.getOverallStatus().equals("Completed"))) {
                 Object[] row = new Object[5];
                 row[0] = request;
                 row[1] = request.getTotalBill();
@@ -571,14 +691,74 @@ public class CareTakerJPanel extends javax.swing.JPanel {
     public void populateRequestHistoryTable() {
         DefaultTableModel dtm = (DefaultTableModel) requestHistoryTable.getModel();
         dtm.setRowCount(0);
-        for (CordinatorWorkRequest request : user.getUserRequestList()) {
-            if (request.getStatus().equals("order delivered")) {
+        for (InternalWorkRequest request : user.getEmployeeRequestList()) {
+            if (request.getOverallStatus().equals("Completed")) {
                 Object row[] = new Object[5];
                 row[0] = request;
                 row[1] = request.getTotalBill();
                 row[2] = request.getStatus();
                 row[3] = request.getCoordinatorAssigned();
                 row[4] = request.getSupplierAssigned();
+                dtm.addRow(row);
+            }
+        }
+    }
+    
+     public void populateRequetedMeetingTable() {
+        DefaultTableModel dtm = (DefaultTableModel) tblrequestMeeting.getModel();
+        dtm.setRowCount(0);
+        for (PlantationWorkRequest request : user.getVolunteerRequestList()) {
+            if (request.getStatus().equals("Approved")) {
+                Object row[] = new Object[5];
+                if(request.getOrg()==null)
+                    row[0] = "Volunteer";
+                else
+                    row[0] = request.getOrg().getName();
+                row[1] = request.getTreeCount();
+                row[2] = request.getUser().getName();
+                row[3] = request.getPickup();
+                row[4] = request;
+                dtm.addRow(row);
+            }
+        }
+        for (SocialWorkRequest request : user.getSocialRequestList()) {
+            if (request.getStatus().equals("Approved")) {
+                Object row[] = new Object[5];
+                row[0] = request.getOrg().getClass();
+                row[1] = request.getTreeCount();
+                row[2] = request.getOrg().getName();
+                row[3] = request.getDate();
+                row[4] = request;
+                dtm.addRow(row);
+            }
+        }
+    }
+     
+      public void populateConfirmedMeetingTable() {
+        DefaultTableModel dtm = (DefaultTableModel) tblMeetings.getModel();
+        dtm.setRowCount(0);
+        for (PlantationWorkRequest request : user.getVolunteerRequestList()) {
+            if (request.getStatus().equals("Confirmed")) {
+                Object row[] = new Object[5];
+                if(request.getOrg()==null)
+                    row[0] = "Volunteer";
+                else
+                    row[0] = request.getOrg().getName();
+                row[1] = request.getTreeCount();
+                row[2] = request.getUser().getName();
+                row[3] = request.getPickup();
+                row[4] = request;
+                dtm.addRow(row);
+            }
+        }
+        for (SocialWorkRequest request : user.getSocialRequestList()) {
+            if (request.getStatus().equals("Confirmed")) {
+                Object row[] = new Object[5];
+                row[0] = request.getOrg().getClass();
+                row[1] = request.getTreeCount();
+                row[2] = request.getOrg().getName();
+                row[3] = request.getDate();
+                row[4] = request;
                 dtm.addRow(row);
             }
         }
@@ -590,12 +770,13 @@ public class CareTakerJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Please complete your profile first", "Warning", JOptionPane.WARNING_MESSAGE);
 
         } else {
-            CordinatorWorkRequest request = new CordinatorWorkRequest();
+            InternalWorkRequest request = new InternalWorkRequest();
             request.setTotalBill(20.00);
            
             request.setRequestDate(new Date());
             request.setEmployee(user);
-            request.setStatus("Requested" + cbRequest.getSelectedItem().toString());
+            request.setStatus("Requested " + cbRequest.getSelectedItem().toString());
+            request.setOverallStatus("in progress");
             request.setType("Headquarter Requirements");
 
             Organization org = null;
@@ -609,12 +790,12 @@ public class CareTakerJPanel extends javax.swing.JPanel {
             if (org != null) {
                 System.out.println(org.getClass());
                 org.getWorkQueue().getRequestList().add(request);
-                user.addUserRequest(request);
+                user.addEmployeeRequest(request);
                 JOptionPane.showMessageDialog(null, "Request Sent Successfully", "Info", JOptionPane.INFORMATION_MESSAGE);
-                populateCurrentRequestTable();
             } else {
                 JOptionPane.showMessageDialog(null, "No organization present", "Error", JOptionPane.ERROR_MESSAGE);
             }
+            populateCurrentRequestTable();
         }
         txtTrees.setText("");
             txtFertilizer.setText("");
@@ -735,16 +916,89 @@ public class CareTakerJPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_cbRequestActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnPickupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPickupActionPerformed
+        // TODO add your handling code here:
+        
+        int selectedRow = tblMeetings.getSelectedRow();
+
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(null, "Please select a row!");
+            return;
+        }
+        WorkRequest request = (WorkRequest) tblMeetings.getValueAt(selectedRow, 4);
+        if(request instanceof PlantationWorkRequest){
+            PlantationWorkRequest request1 = (PlantationWorkRequest)tblMeetings.getValueAt(selectedRow, 4);
+        request1.setStatus("Plantation in progress");
+        System.out.println(request.getStatus() + " "+request.getOverallStatus()+" "+request.getUser().getName());
+        }
+        else{
+            SocialWorkRequest request1 = (SocialWorkRequest)tblMeetings.getValueAt(selectedRow, 4);
+            request1.setStatus("Planted");
+        request1.setOverallStatus("completed");
+        
+        //Notification sent to Government
+//        NotificationRequest notify = new NotificationRequest();
+//        notify.setHeadquaterManager(request.getCoordinatorAssigned());
+//        notify.setStatus("planted");
+//        notify.setTreeCount(request.getTreeCount());
+//        notify.setType("Plantation");
+//        notify.setZipcode(request.getZipcode());
+//        
+//        for(Enterprise e : user.getNetwork().getEnterpriseDirectory().getEnterpriseList()){
+//            if(e instanceof GovernmentEnterprise){
+//                for(Organization o: e.getOrganizationDirectory().getOrganizationList()){
+//                    o.getWorkQueue().getNotificationList().add(notify);
+//                    break;
+//                }
+//            }
+//        }
+        }
+        populateConfirmedMeetingTable();
+        populateRequetedMeetingTable();
+    }//GEN-LAST:event_btnPickupActionPerformed
+
+    private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
+        // TODO add your handling code here:
+        
+        int selectedRow = tblrequestMeeting.getSelectedRow();
+
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(null, "Please select a row!");
+            return;
+        }
+        WorkRequest request = (WorkRequest) tblrequestMeeting.getValueAt(selectedRow, 4);
+        if(request instanceof PlantationWorkRequest){
+            PlantationWorkRequest request1 = (PlantationWorkRequest)tblrequestMeeting.getValueAt(selectedRow, 4);
+            request1.setStatus("Confirmed");
+        }
+        else{
+            SocialWorkRequest request1 = (SocialWorkRequest)tblrequestMeeting.getValueAt(selectedRow, 4);
+            request1.setStatus("Confirmed");
+        }
+        
+        populateRequetedMeetingTable();
+        populateConfirmedMeetingTable();
+        //email user
+        
+    }//GEN-LAST:event_btnConfirmActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> CbGender;
     private javax.swing.JTable CurrentRequestTable;
+    private javax.swing.JButton btnConfirm;
     private javax.swing.JButton btnConfirmDelivery;
+    private javax.swing.JButton btnPickup;
     private javax.swing.JButton btnProfile;
     private javax.swing.JButton btnRequest;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cbRequest;
     private org.jdesktop.swingx.JXDatePicker dpDoB;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -756,8 +1010,11 @@ public class CareTakerJPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblContact5;
     private javax.swing.JLabel lblDoB5;
@@ -768,6 +1025,8 @@ public class CareTakerJPanel extends javax.swing.JPanel {
     private javax.swing.JLabel logout6;
     private javax.swing.JLabel profile;
     private javax.swing.JTable requestHistoryTable;
+    private javax.swing.JTable tblMeetings;
+    private javax.swing.JTable tblrequestMeeting;
     private javax.swing.JTextField txtContact;
     private javax.swing.JTextField txtFertilizer;
     private javax.swing.JTextField txtName;

@@ -21,10 +21,17 @@ public abstract class WorkRequest {
     private Employee supplierAssigned;
     private User user;
     private String status;
-    private User Investorstatus;
-    private User Supplierstatus;    
+    private String overallStatus;
     private Date requestDate;
     private String Type;
+
+    public String getOverallStatus() {
+        return overallStatus;
+    }
+
+    public void setOverallStatus(String overallStatus) {
+        this.overallStatus = overallStatus;
+    }
     
     public WorkRequest(){
         requestDate = new Date();
@@ -52,22 +59,6 @@ public abstract class WorkRequest {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public User getInvestorstatus() {
-        return Investorstatus;
-    }
-
-    public void setInvestorstatus(User Investorstatus) {
-        this.Investorstatus = Investorstatus;
-    }
-
-    public User getSupplierstatus() {
-        return Supplierstatus;
-    }
-
-    public void setSupplierstatus(User Supplierstatus) {
-        this.Supplierstatus = Supplierstatus;
     }
 
     public String getType() {

@@ -8,7 +8,7 @@ import Business.EcoSystem;
 import Business.Enterprise.Enterprise;
 import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
-import Business.WorkQueue.CordinatorWorkRequest;
+import Business.WorkQueue.InternalWorkRequest;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.util.logging.Level;
@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author alekhya
+ * @author raunak
  */
 public class RequestLabTestJPanel extends javax.swing.JPanel {
 
@@ -86,7 +86,7 @@ public class RequestLabTestJPanel extends javax.swing.JPanel {
         
         String message = messageJTextField.getText();
         
-        CordinatorWorkRequest request = new CordinatorWorkRequest();
+        InternalWorkRequest request = new InternalWorkRequest();
 //        request.setMessage(message);
 //        request.setSender(userAccount);
         request.setStatus("Sent");
@@ -99,8 +99,8 @@ public class RequestLabTestJPanel extends javax.swing.JPanel {
 //            }
         }
         if (org!=null){
-            org.getWorkQueue().getWorkRequestList().add(request);
-            userAccount.getWorkQueue().getWorkRequestList().add(request);
+//            org.getWorkQueue().getWorkRequestList().add(request);
+//            userAccount.getWorkQueue().getWorkRequestList().add(request);
         }
         
     }//GEN-LAST:event_requestTestJButtonActionPerformed
