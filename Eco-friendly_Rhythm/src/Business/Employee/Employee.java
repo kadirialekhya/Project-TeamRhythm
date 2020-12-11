@@ -5,7 +5,10 @@
 package Business.Employee;
 
 import Business.Role.Role;
-import Business.WorkQueue.CordinatorWorkRequest;
+import Business.WorkQueue.ExternalWorkRequest;
+import Business.WorkQueue.SocialWorkRequest;
+import Business.WorkQueue.InternalWorkRequest;
+import Business.WorkQueue.PlantationWorkRequest;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,7 +33,18 @@ public class Employee {
     private String zip ;
     private Role role;
     private File profilePicture;
-    private ArrayList<CordinatorWorkRequest> userRequestList ;
+    private ArrayList<InternalWorkRequest> employeeRequestList ;
+    private ArrayList<SocialWorkRequest> socialRequestList ;
+    private ArrayList<ExternalWorkRequest> userRequestList ;
+    private ArrayList<PlantationWorkRequest> volunteerRequestList ;
+
+    public ArrayList<PlantationWorkRequest> getVolunteerRequestList() {
+        return volunteerRequestList;
+    }
+
+    public void setVolunteerRequestList(ArrayList<PlantationWorkRequest> volunteerRequestList) {
+        this.volunteerRequestList = volunteerRequestList;
+    }
     private boolean completeProfile = false;
 
     public Role getRole() {
@@ -46,6 +60,9 @@ public class Employee {
         id = count;
         count++;
         userRequestList = new ArrayList();
+        employeeRequestList = new ArrayList();
+        volunteerRequestList = new ArrayList();
+        socialRequestList = new ArrayList();
     }
 
     public int getId() {
@@ -69,6 +86,14 @@ public class Employee {
         this.completeProfile = completeProfile;
     }
 
+    public ArrayList<InternalWorkRequest> getEmployeeRequestList() {
+        return employeeRequestList;
+    }
+
+    public void setEmployeeRequestList(ArrayList<InternalWorkRequest> employeeRequestList) {
+        this.employeeRequestList = employeeRequestList;
+    }
+
     public File getProfilePicture() {
         return profilePicture;
     }
@@ -77,11 +102,11 @@ public class Employee {
         this.profilePicture = profilePicture;
     }
 
-    public ArrayList<CordinatorWorkRequest> getUserRequestList() {
+    public ArrayList<ExternalWorkRequest> getUserRequestList() {
         return userRequestList;
     }
 
-    public void setUserRequestList(ArrayList<CordinatorWorkRequest> userRequestList) {
+    public void setUserRequestList(ArrayList<ExternalWorkRequest> userRequestList) {
         this.userRequestList = userRequestList;
     }
     
@@ -147,9 +172,32 @@ public class Employee {
         this.password = password;
     }
     
-    public  void addUserRequest (CordinatorWorkRequest  userRequest) {
+    public  void addUserRequest (ExternalWorkRequest  userRequest) {
     
-    userRequestList.add(userRequest);
+        userRequestList.add(userRequest);
+    }
+    
+    public  void addEmployeeRequest (InternalWorkRequest  userRequest) {
+    
+        employeeRequestList.add(userRequest);
+    }
+    
+    public  void addVolunteerRequest (PlantationWorkRequest  userRequest) {
+    
+        volunteerRequestList.add(userRequest);
+    }
+    
+    public  void addSocialRequest (SocialWorkRequest  userRequest) {
+    
+        socialRequestList.add(userRequest);
+    }
+
+    public ArrayList<SocialWorkRequest> getSocialRequestList() {
+        return socialRequestList;
+    }
+
+    public void setSocialRequestList(ArrayList<SocialWorkRequest> socialRequestList) {
+        this.socialRequestList = socialRequestList;
     }
      
 }

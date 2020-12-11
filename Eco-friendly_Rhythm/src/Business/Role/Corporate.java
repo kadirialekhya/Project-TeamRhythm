@@ -29,7 +29,7 @@ public class Corporate extends Role{
             Organization organization, 
             Enterprise enterprise, 
             EcoSystem business){
-        return new CorporateJPanel(userProcessContainer,business);
+        return new CorporateJPanel(userProcessContainer,organization,business);
 //        userProcessContainer.add("CorporateJPanel",jpanel);
 //        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
 //        layout.next(userProcessContainer);
