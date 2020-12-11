@@ -28,7 +28,7 @@ public class Government extends Role {
             Organization organization, 
             Enterprise enterprise, 
             EcoSystem business){
-        return new GovernmentJPanel(userProcessContainer ,business);
+        return new GovernmentJPanel(userProcessContainer, account, organization, business);
 //        userProcessContainer.add("GovernmentJPanel",jpanel);
 //        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
 //        layout.next(userProcessContainer);

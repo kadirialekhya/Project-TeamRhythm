@@ -8,6 +8,7 @@ package Business.Role;
 import Business.DB4OUtil.DB4OUtil;
 import Business.EcoSystem;
 import Business.Enterprise.Enterprise;
+import Business.Network.Network;
 import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import java.awt.CardLayout;
@@ -25,11 +26,7 @@ public class Informer extends Role {
     @Override
     public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, 
             Enterprise enterprise, EcoSystem business) {
-        return new InformerJPanel(userProcessContainer, organization, enterprise, account, business);
-//        userProcessContainer.add("InformerJPanel",jpanel);
-//        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
-//        layout.next(userProcessContainer);
-//        jpanel.setVisible(true);
+        return new InformerJPanel(userProcessContainer, account.getUser(), business);
     }
     
     
