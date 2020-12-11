@@ -7,6 +7,7 @@ package Business.Network;
 
 import Business.Enterprise.EnterpriseDirectory;
 import Business.UserAccount.UserAccountDirectory;
+import Business.WorkQueue.WorkQueue;
 
 /**
  * @author Alekhya
@@ -20,10 +21,19 @@ public class Network {
     private String state;
     private String country;
     private UserAccountDirectory userAccountDirectory;
+    private WorkQueue poolWorkQueue;
     private EnterpriseDirectory enterpriseDirectory;
 
     public String getCity() {
         return city;
+    }
+
+    public WorkQueue getPoolWorkQueue() {
+        return poolWorkQueue;
+    }
+
+    public void setPoolWorkQueue(WorkQueue poolWorkQueue) {
+        this.poolWorkQueue = poolWorkQueue;
     }
 
     public EnterpriseDirectory getEnterpriseDirectory() {
@@ -57,15 +67,17 @@ public class Network {
     public Network(){
         userAccountDirectory=new UserAccountDirectory();
         enterpriseDirectory = new EnterpriseDirectory();
+        poolWorkQueue = new WorkQueue();
     }
 
-    public Network(String name, String city, String state, String country, UserAccountDirectory uad, EnterpriseDirectory ed) {
+    public Network(String name, String city, String state, String country) {
         this.name = name;
         this.city = city;
         this.state = state;
         this.country = country;
-        this.userAccountDirectory=uad;
-        this.enterpriseDirectory = ed;
+        userAccountDirectory=new UserAccountDirectory();
+        enterpriseDirectory = new EnterpriseDirectory();
+        poolWorkQueue = new WorkQueue();
     }
     public String getName() {
         return name;
