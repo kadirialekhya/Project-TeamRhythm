@@ -30,6 +30,7 @@ import Business.Role.Logistics;
 import Business.Role.NGO;
 import Business.Role.Supplier;
 import Business.Role.SystemAdmin;
+import Business.User.User;
 import Business.UserAccount.UserAccount;
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
@@ -172,24 +173,6 @@ public class LoginJPanel extends javax.swing.JPanel {
         userAccount = system.getUserAccountDirectory().authenticateUser(userName, password);
         inEnterprise = null;
         inOrganization = new AdministratorOrganization();
-
-//        check admins or end-users
-        for (Network network : system.getNetworkList()) {
-            for (UserAccount ua : network.getUserAccountDirectory().getUserAccountList()) {
-                if(ua.getUsername().equals(userName) && ua.getPassword().equals(password)){
-                userAccount = ua;
-                if (ua.getRole() instanceof AdminRole) {
-                    inEnterprise = null;
-                    inOrganization = new AdminOrganization();
-                    break;
-                } else if (ua.getRole() instanceof SystemAdmin) {
-                    inEnterprise = null;
-                    inOrganization = new AdministratorOrganization();
-                    break;
-                }
-                }
-            }
-        }
         
         //check for employee in each network/enterprise/organization
         if (userAccount == null) {
