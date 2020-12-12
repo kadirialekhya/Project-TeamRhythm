@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author Alekhya
+ * @author Am3y
  */
 public class LogisticsJPanel extends javax.swing.JPanel {
 
