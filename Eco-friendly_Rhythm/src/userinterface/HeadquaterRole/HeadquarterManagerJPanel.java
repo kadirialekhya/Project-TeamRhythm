@@ -8,11 +8,15 @@ package userinterface.HeadquaterRole;
 import Business.EcoSystem;
 import Business.Employee.Employee;
 import Business.Enterprise.Enterprise;
+import Business.Organization.CareTakerOrganization;
 import Business.Organization.Organization;
 import Business.Organization.SupplierOrganization;
 import Business.User.User;
 import Business.UserAccount.UserAccount;
-import Business.WorkQueue.CordinatorWorkRequest;
+import Business.WorkQueue.InternalWorkRequest;
+import Business.WorkQueue.ExternalWorkRequest;
+import Business.WorkQueue.PlantationWorkRequest;
+import Business.WorkQueue.SocialWorkRequest;
 import Business.WorkQueue.WorkQueue;
 import Business.WorkQueue.WorkRequest;
 import java.awt.CardLayout;
@@ -410,7 +414,7 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
     public void populatePoolTable() {
         DefaultTableModel dtm = (DefaultTableModel) requestPoolTable.getModel();
         dtm.setRowCount(0);
-        for (CordinatorWorkRequest request : requestQueue.getRequestList()) {
+        for (InternalWorkRequest request : requestQueue.getRequestList()) {
             if (request.getCoordinatorAssigned() == null) {
                 System.out.println("inside loop");
                 Object row[] = new Object[5];
@@ -422,46 +426,90 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
                 dtm.addRow(row);
             }
         }
-        for (WorkRequest request : requestQueue.getWorkRequestList()) {
-            if (!(request instanceof CordinatorWorkRequest)) {
-                System.out.println("request found");
-                if (request.getCoordinatorAssigned() == null) {
-                    Object row[] = new Object[5];
-                    row[0] = request;
-                    row[1] = request.getUser().getName();
-                    row[2] = "unassigned";
-                    row[3] = request.getRequestDate();
-                    row[4] = request.getStatus();
-                    dtm.addRow(row);
-                }
+        for (ExternalWorkRequest request : requestQueue.getWorkRequestList()) {
+            System.out.println("request found");
+            if (request.getCoordinatorAssigned() == null) {
+                Object row[] = new Object[5];
+                row[0] = request;
+                row[1] = request.getUser().getName();
+                row[2] = "unassigned";
+                row[3] = request.getRequestDate();
+                row[4] = request.getStatus();
+                dtm.addRow(row);
+            }
+
+        }
+        for (PlantationWorkRequest request : requestQueue.getPoolList()) {
+            System.out.println("request");
+            if (request.getCoordinatorAssigned() == null) {
+                Object row[] = new Object[5];
+                row[0] = request;
+                row[1] = request.getUser().getName();
+                row[2] = "unassigned";
+                row[3] = request.getRequestDate();
+                row[4] = request.getStatus();
+                dtm.addRow(row);
             }
         }
-
+        for (SocialWorkRequest request : requestQueue.getSocialList()) {
+            System.out.println("social");
+            if (request.getManager()== null) {
+                Object row[] = new Object[5];
+                row[0] = request;
+                row[1] = request.getOrg().getName();
+                row[2] = "unassigned";
+                row[3] = request.getDate();
+                row[4] = request.getStatus();
+                dtm.addRow(row);
+            }
+        }
     }
 
     public void populateAssignedTable() {
         DefaultTableModel dtm = (DefaultTableModel) assignedRequestTable.getModel();
         dtm.setRowCount(0);
-        for (WorkRequest request : manager.getUserRequestList()) {
-            if (!(request instanceof CordinatorWorkRequest)) {
-                if (request.getCoordinatorAssigned().getUserName().equals(manager.getUserName())) {
-                    Object row[] = new Object[5];
-                    row[0] = request;
-                    row[1] = request.getUser().getName();
-                    row[2] = request.getCoordinatorAssigned().getName();
-                    row[3] = request.getRequestDate();
-                    row[4] = request.getStatus();
-                    dtm.addRow(row);
-                }
+        for (ExternalWorkRequest request : manager.getUserRequestList()) {
+            if (request.getCoordinatorAssigned().getUserName().equals(manager.getUserName())) {
+                Object row[] = new Object[5];
+                row[0] = request;
+                row[1] = request.getUser().getName();
+                row[2] = request.getCoordinatorAssigned().getName();
+                row[3] = request.getRequestDate();
+                row[4] = request.getStatus();
+                dtm.addRow(row);
             }
         }
-        for (CordinatorWorkRequest request : manager.getUserRequestList()) {
+        for (InternalWorkRequest request : manager.getEmployeeRequestList()) {
             if (request.getCoordinatorAssigned().getUserName().equals(manager.getUserName())) {
                 Object row[] = new Object[5];
                 row[0] = request;
                 row[1] = request.getEmployee().getName();
                 row[2] = request.getCoordinatorAssigned().getName();
                 row[3] = request.getRequestDate();
+                row[4] = request.getStatus();
+                dtm.addRow(row);
+            }
+        }
+        for (PlantationWorkRequest request : manager.getVolunteerRequestList()) {
+            if (request.getCoordinatorAssigned().getUserName().equals(manager.getUserName())) {
+                Object row[] = new Object[5];
+                //change toString
+                row[0] = request;
+                row[1] = request.getUser().getName();
+                row[2] = request.getCoordinatorAssigned().getName();
+                row[3] = request.getRequestDate();
+                row[4] = request.getStatus();
+                dtm.addRow(row);
+            }
+        }
+        for (SocialWorkRequest request : manager.getSocialRequestList()) {
+            System.out.println("social");
+            if (request.getManager().getUserName().equals(manager.getUserName())) {
+                Object row[] = new Object[5];
+                row[0] = request;
+                row[1] = request.getOrg().getName();
+                row[2] = "unassigned";
+                row[3] = request.getDate();
                 row[4] = request.getStatus();
                 dtm.addRow(row);
             }
@@ -476,12 +524,34 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Please select a row!");
             return;
         }
+        WorkRequest request1 = (WorkRequest) requestPoolTable.getValueAt(selectedRow, 0);
         if (requestPoolTable.getValueAt(selectedRow, 2).equals("unassigned")) {
+            if (request1 instanceof InternalWorkRequest) {
+                System.out.println("Cordinator");
+                InternalWorkRequest request = (InternalWorkRequest) requestPoolTable.getValueAt(selectedRow, 0);
+                request.setCoordinatorAssigned(manager);
+                request.setStatus("Assigned to " + manager.getName());
+                manager.addEmployeeRequest(request);
+            } else if(request1 instanceof ExternalWorkRequest){
+                System.out.println("External");
+                ExternalWorkRequest request = (ExternalWorkRequest) requestPoolTable.getValueAt(selectedRow, 0);
+                request.setCoordinatorAssigned(manager);
+                request.setStatus("Assigned to " + manager.getName());
+                manager.addUserRequest(request);
+            }else if(request1 instanceof PlantationWorkRequest){
+                System.out.println("Outer");
+                PlantationWorkRequest request = (PlantationWorkRequest) requestPoolTable.getValueAt(selectedRow, 0);
+                request.setCoordinatorAssigned(manager);
+                request.setStatus("Assigned to " + manager.getName());
+                manager.addVolunteerRequest(request);
+            }else{
+                SocialWorkRequest request = (SocialWorkRequest) requestPoolTable.getValueAt(selectedRow, 0);
+                request.setManager(manager);
+                request.setStatus("Assigned to " + manager.getName());
+                manager.addSocialRequest(request);
+            }
             System.out.println(requestPoolTable.getValueAt(selectedRow, 0));
-            CordinatorWorkRequest request = (CordinatorWorkRequest) requestPoolTable.getValueAt(selectedRow, 0);
-            request.setCoordinatorAssigned(manager);
-            request.setStatus("Assigned to " + manager.getName());
-            manager.addUserRequest(request);
+
             JOptionPane.showMessageDialog(null, "Request assigned ", "Info", JOptionPane.INFORMATION_MESSAGE);
             populatePoolTable();
             populateAssignedTable();
@@ -499,13 +569,13 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
             return;
         }
 
-        if (assignedRequestTable.getValueAt(selectedRow, 0) instanceof CordinatorWorkRequest) {
-            CordinatorWorkRequest request = (CordinatorWorkRequest) assignedRequestTable.getValueAt(selectedRow, 0);
-            System.out.println("HM: "+request.getEmployee());
+        if (assignedRequestTable.getValueAt(selectedRow, 0) instanceof InternalWorkRequest) {
+            InternalWorkRequest request = (InternalWorkRequest) assignedRequestTable.getValueAt(selectedRow, 0);
+            System.out.println("HM: " + request.getEmployee());
             System.out.println(request.getStatus());
-            for(Organization o:enterprise.getOrganizationDirectory().getOrganizationList()){
-                if(o instanceof SupplierOrganization){
-                    org=o;
+            for (Organization o : enterprise.getOrganizationDirectory().getOrganizationList()) {
+                if (o instanceof SupplierOrganization) {
+                    org = o;
                     break;
                 }
             }
@@ -513,10 +583,37 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
             userProcessContainer.add("ProcessJPanel", panel);
             CardLayout layout = (CardLayout) userProcessContainer.getLayout();
             layout.next(userProcessContainer);
-        } else {
-            WorkRequest request = (WorkRequest) assignedRequestTable.getValueAt(selectedRow, 0);
+        } else if(assignedRequestTable.getValueAt(selectedRow, 0) instanceof PlantationWorkRequest){
+            System.out.println("Plantation");
+            for (Organization o : enterprise.getOrganizationDirectory().getOrganizationList()) {
+                if (o instanceof CareTakerOrganization) {
+                    org = o;
+                    break;
+                }
+            }
+           PlantationWorkRequest request = (PlantationWorkRequest) assignedRequestTable.getValueAt(selectedRow, 0);
+           PoolProcessJPanel panel = new PoolProcessJPanel(userProcessContainer, org, request);
+            userProcessContainer.add("PoolProcessJPanel", panel);
+            CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+            layout.next(userProcessContainer);
+        }
+        else if(assignedRequestTable.getValueAt(selectedRow, 0) instanceof ExternalWorkRequest){
+             System.out.println("External!!");
+            ExternalWorkRequest request = (ExternalWorkRequest) assignedRequestTable.getValueAt(selectedRow, 0);
             ProcessJPanel panel = new ProcessJPanel(userProcessContainer, request);
             userProcessContainer.add("ProcessJPanel", panel);
+            CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+            layout.next(userProcessContainer);
+        }else{
+            for (Organization o : enterprise.getOrganizationDirectory().getOrganizationList()) {
+                if (o instanceof CareTakerOrganization) {
+                    org = o;
+                    break;
+                }
+            }
+            SocialWorkRequest request = (SocialWorkRequest) assignedRequestTable.getValueAt(selectedRow, 0);
+            SocialProcessJPanel panel = new SocialProcessJPanel(userProcessContainer, org, request);
+            userProcessContainer.add("SocialProcessJPanel", panel);
             CardLayout layout = (CardLayout) userProcessContainer.getLayout();
             layout.next(userProcessContainer);
         }
@@ -579,7 +676,7 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
 
     private void logout7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logout7MouseClicked
         // TODO add your handling code here:
-        
+
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         userProcessContainer.remove(this);
         layout.previous(userProcessContainer);

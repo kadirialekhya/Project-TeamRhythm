@@ -5,7 +5,18 @@
  */
 package userinterface.HeadquaterRole;
 
+import Business.Employee.Employee;
+import Business.Enterprise.Enterprise;
+import Business.Enterprise.GovernmentEnterprise;
+import Business.Network.Network;
+import Business.Organization.Organization;
+import Business.WorkQueue.ExternalWorkRequest;
+import Business.WorkQueue.NotificationRequest;
+import Business.WorkQueue.PlantationWorkRequest;
 import Business.WorkQueue.WorkRequest;
+import java.awt.CardLayout;
+import java.util.Date;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -14,15 +25,20 @@ import javax.swing.JPanel;
  */
 public class ProcessJPanel extends javax.swing.JPanel {
 
+    
+    JPanel userProcessContainer;
+    private ExternalWorkRequest request;
+    
     /**
      * Creates new form ProcessJPanel
      */
-    public ProcessJPanel() {
+    ProcessJPanel(JPanel userProcessContainer, ExternalWorkRequest request) {
         initComponents();
-    }
-
-    ProcessJPanel(JPanel userProcessContainer, WorkRequest request) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.request = request;
+        this.userProcessContainer = userProcessContainer;
+        txtCause.setText(request.getCause());
+        txtZip.setText(request.getZipcode());
+        txtTrees.setText(String.valueOf(request.getNoOfTress()));
     }
 
     /**
@@ -35,21 +51,156 @@ public class ProcessJPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         supplierOrganization1 = new Business.Organization.SupplierOrganization();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        tbnConfirm = new javax.swing.JButton();
+        btnDeny = new javax.swing.JButton();
+        txtTrees = new javax.swing.JTextField();
+        txtZip = new javax.swing.JTextField();
+        txtCause = new javax.swing.JTextField();
+
+        jLabel1.setText("Zipcode");
+
+        jLabel2.setText("Cause");
+
+        jLabel3.setText("Trees down by");
+
+        tbnConfirm.setText("Confirm");
+        tbnConfirm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tbnConfirmActionPerformed(evt);
+            }
+        });
+
+        btnDeny.setText("Deny");
+        btnDeny.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDenyActionPerformed(evt);
+            }
+        });
+
+        txtTrees.setEnabled(false);
+
+        txtZip.setEnabled(false);
+
+        txtCause.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 900, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(218, 218, 218)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtCause, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtZip, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                        .addComponent(txtTrees, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(tbnConfirm)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDeny)))
+                .addContainerGap(459, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 600, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3)
+                    .addComponent(txtTrees, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtZip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(42, 42, 42)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2)
+                    .addComponent(txtCause, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addComponent(tbnConfirm))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(46, 46, 46)
+                        .addComponent(btnDeny)))
+                .addContainerGap(356, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnDenyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDenyActionPerformed
+        // TODO add your handling code here:
+         request.setStatus("Declined");
+         request.setOverallStatus("completed");
+        JOptionPane.showMessageDialog(null, "Declined Successfully!");
+        
+        //back to page
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        userProcessContainer.remove(this);
+        layout.previous(userProcessContainer);
+    }//GEN-LAST:event_btnDenyActionPerformed
+
+    private void tbnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbnConfirmActionPerformed
+        // TODO add your handling code here:
+        System.out.println("Process: "+request.getUser());
+        request.setStatus("Tip confirmed and added to pool");
+        request.setOverallStatus("completed");
+        System.out.println(request.getStatus());
+        JOptionPane.showMessageDialog(null, "Tip Confirmed");
+        
+        PlantationWorkRequest poolRequest = new PlantationWorkRequest();
+        poolRequest.setZipcode(request.getZipcode());
+        poolRequest.setTreeCount(request.getNoOfTress());
+        poolRequest.setStatus("In pool");
+        poolRequest.setOverallStatus("in pool");
+        poolRequest.setRequestDate(new Date());
+        poolRequest.setType("Area green imbalance");
+        Network network = request.getUser().getNetwork();
+        network.getPoolWorkQueue().getPoolList().add(poolRequest);
+        
+        //Notification sent to Government
+        NotificationRequest notify = new NotificationRequest();
+        notify.setHeadquaterManager(request.getCoordinatorAssigned());
+        notify.setInformer(request.getUser());
+        notify.setStatus("In pool");
+        notify.setTreeCount(request.getNoOfTress());
+        notify.setType("Ecological Imbalance");
+        notify.setZipcode(request.getZipcode());
+        
+        for(Enterprise e : network.getEnterpriseDirectory().getEnterpriseList()){
+            if(e instanceof GovernmentEnterprise){
+                for(Organization o: e.getOrganizationDirectory().getOrganizationList()){
+                    o.getWorkQueue().getNotificationList().add(notify);
+                    break;
+                }
+            }
+        }
+        
+        //back to page
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        userProcessContainer.remove(this);
+        layout.previous(userProcessContainer);
+    }//GEN-LAST:event_tbnConfirmActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDeny;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private Business.Organization.SupplierOrganization supplierOrganization1;
+    private javax.swing.JButton tbnConfirm;
+    private javax.swing.JTextField txtCause;
+    private javax.swing.JTextField txtTrees;
+    private javax.swing.JTextField txtZip;
     // End of variables declaration//GEN-END:variables
 }
