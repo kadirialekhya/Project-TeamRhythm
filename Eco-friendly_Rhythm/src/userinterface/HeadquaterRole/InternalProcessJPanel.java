@@ -12,7 +12,7 @@ import Business.Organization.Organization;
 import Business.Role.Supplier;
 import Business.Organization.SupplierOrganization;
 import Business.UserAccount.UserAccount;
-import Business.WorkQueue.CordinatorWorkRequest;
+import Business.WorkQueue.InternalWorkRequest;
 import java.awt.CardLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -25,7 +25,7 @@ import javax.swing.JPanel;
 public class InternalProcessJPanel extends javax.swing.JPanel {
 
     private JPanel userProcessContainer;
-    private CordinatorWorkRequest request;
+    private InternalWorkRequest request;
     SupplierOrganization business;
     Enterprise enterprise;
     Organization org;
@@ -34,7 +34,7 @@ public class InternalProcessJPanel extends javax.swing.JPanel {
      * Creates new form InternalProcessJPanel
      */
 
-    InternalProcessJPanel(JPanel userProcessContainer, Organization org, Enterprise enterprise, CordinatorWorkRequest request) {
+    InternalProcessJPanel(JPanel userProcessContainer, Organization org, Enterprise enterprise, InternalWorkRequest request) {
       initComponents();
       this.userProcessContainer = userProcessContainer;
       this.request = request;
@@ -131,7 +131,7 @@ public class InternalProcessJPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(148, 148, 148)
                         .addComponent(jLabel4)))
-                .addGap(462, 462, 462))
+                .addGap(447, 447, 447))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -197,14 +197,13 @@ public class InternalProcessJPanel extends javax.swing.JPanel {
         request.setStatus("assigned to Supplier");
         request.setSupplierAssigned(selectedItem);
         System.out.println(request.getStatus());
-        selectedItem.addUserRequest(request);
+        selectedItem.addEmployeeRequest(request);
         JOptionPane.showMessageDialog(null, "Supplier assigned successfully");
         
         //back to page
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         userProcessContainer.remove(this);
         layout.previous(userProcessContainer);
-        initComponents();
     }//GEN-LAST:event_btnAssignActionPerformed
 
     private void btnDeclineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeclineActionPerformed
