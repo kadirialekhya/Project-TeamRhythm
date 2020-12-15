@@ -5,9 +5,11 @@
  */
 package userinterface.HeadquaterRole;
 
+import Business.DB4OUtil.DB4OUtil;
 import Business.EcoSystem;
 import Business.Employee.Employee;
 import Business.Enterprise.Enterprise;
+import Business.Network.Network;
 import Business.Organization.Organization;
 import Business.Role.Supplier;
 import Business.Organization.SupplierOrganization;
@@ -19,8 +21,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
- *
- * @author Am3y
+ * @author Alekhya
+ * @author Apeksha
+ * @author Shalini
  */
 public class InternalProcessJPanel extends javax.swing.JPanel {
 
@@ -29,18 +32,23 @@ public class InternalProcessJPanel extends javax.swing.JPanel {
     SupplierOrganization business;
     Enterprise enterprise;
     Organization org;
+    Network network;
+    EcoSystem system;
+    private DB4OUtil dB4OUtil = DB4OUtil.getInstance();
             
     /**
      * Creates new form InternalProcessJPanel
      */
 
-    InternalProcessJPanel(JPanel userProcessContainer, Organization org, Enterprise enterprise, InternalWorkRequest request) {
+    InternalProcessJPanel(JPanel userProcessContainer, Organization org,Network network, Enterprise enterprise, InternalWorkRequest request, EcoSystem system) {
       initComponents();
       this.userProcessContainer = userProcessContainer;
       this.request = request;
+      this.system = system;
       this.enterprise = enterprise;
       this.org = org;
-      txtFunds.setText("600");
+      this.network =network;
+      txtFunds.setText(String.valueOf(network.getFunds()));
       txtRequested.setText(request.getEmployee().getName());
       txtTotal.setText(String.valueOf(request.getTotalBill()));
       populateComboBox();
@@ -66,8 +74,14 @@ public class InternalProcessJPanel extends javax.swing.JPanel {
         cbSupplier = new javax.swing.JComboBox<String>();
         btnAssign = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(0, 51, 51));
+
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Requested  By:");
 
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Total Bill:");
 
         txtTotal.setEnabled(false);
@@ -79,10 +93,13 @@ public class InternalProcessJPanel extends javax.swing.JPanel {
             }
         });
 
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Funds:");
 
         txtFunds.setEnabled(false);
 
+        btnDecline.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         btnDecline.setText("Decline");
         btnDecline.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -90,6 +107,8 @@ public class InternalProcessJPanel extends javax.swing.JPanel {
             }
         });
 
+        jLabel4.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Supplier :");
 
         cbSupplier.addActionListener(new java.awt.event.ActionListener() {
@@ -98,6 +117,7 @@ public class InternalProcessJPanel extends javax.swing.JPanel {
             }
         });
 
+        btnAssign.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         btnAssign.setText("Assign");
         btnAssign.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -110,54 +130,54 @@ public class InternalProcessJPanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(365, 365, 365)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(130, 130, 130)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(btnAssign))
-                        .addGap(94, 94, 94)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(txtFunds)
-                                .addComponent(txtTotal)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(0, 0, Short.MAX_VALUE)
-                                    .addComponent(btnDecline))
-                                .addComponent(txtRequested))
-                            .addComponent(cbSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnAssign)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDecline))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(148, 148, 148)
-                        .addComponent(jLabel4)))
-                .addGap(447, 447, 447))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel1)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)))
+                        .addGap(49, 49, 49)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtTotal, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtRequested, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtFunds)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(cbSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
+                .addGap(257, 257, 257))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(117, 117, 117)
+                .addGap(156, 156, 156)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
                             .addComponent(txtRequested, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(41, 41, 41)
-                        .addComponent(jLabel2)))
-                .addGap(66, 66, 66)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGap(52, 52, 52)))
+                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
                     .addComponent(txtFunds, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel4)
-                    .addComponent(cbSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(63, 63, 63)
+                .addGap(35, 35, 35)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(cbSupplier, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(75, 75, 75)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDecline)
-                    .addComponent(btnAssign))
-                .addContainerGap(183, Short.MAX_VALUE))
+                    .addComponent(btnAssign)
+                    .addComponent(btnDecline))
+                .addContainerGap(165, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -199,11 +219,14 @@ public class InternalProcessJPanel extends javax.swing.JPanel {
         System.out.println(request.getStatus());
         selectedItem.addEmployeeRequest(request);
         JOptionPane.showMessageDialog(null, "Supplier assigned successfully");
+        network.setFunds((int) (network.getFunds()-request.getTotalBill()));
         
         //back to page
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         userProcessContainer.remove(this);
         layout.previous(userProcessContainer);
+        
+        dB4OUtil.storeSystem(system);
     }//GEN-LAST:event_btnAssignActionPerformed
 
     private void btnDeclineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeclineActionPerformed
@@ -217,6 +240,7 @@ public class InternalProcessJPanel extends javax.swing.JPanel {
         userProcessContainer.remove(this);
         layout.previous(userProcessContainer);
         
+        dB4OUtil.storeSystem(system);
         
     }//GEN-LAST:event_btnDeclineActionPerformed
 

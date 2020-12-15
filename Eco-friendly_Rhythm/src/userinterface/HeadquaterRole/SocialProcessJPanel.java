@@ -5,6 +5,8 @@
  */
 package userinterface.HeadquaterRole;
 
+import Business.DB4OUtil.DB4OUtil;
+import Business.EcoSystem;
 import Business.Employee.Employee;
 import Business.Organization.Organization;
 import Business.Role.CareTaker;
@@ -15,9 +17,11 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+
 /**
- *
- * @author Am3y
+ * @author Alekhya
+ * @author Apeksha
+ * @author Shalini
  */
 public class SocialProcessJPanel extends javax.swing.JPanel {
 
@@ -25,13 +29,16 @@ public class SocialProcessJPanel extends javax.swing.JPanel {
     JPanel userProcessContainer;
     SocialWorkRequest request;
     Organization org;
+    EcoSystem system;
+    private DB4OUtil dB4OUtil = DB4OUtil.getInstance();
     
     /**
      * Creates new form SocialProcessJPanel
      */
-    public SocialProcessJPanel(JPanel userProcessContainer, Organization org,SocialWorkRequest request) {
+    public SocialProcessJPanel(JPanel userProcessContainer, Organization org,SocialWorkRequest request, EcoSystem system) {
         initComponents();
         this.request = request;
+        this.system = system;
       this.userProcessContainer = userProcessContainer;
       this.org = org;
       txtName.setText(request.getOrg().getName());
@@ -57,12 +64,20 @@ public class SocialProcessJPanel extends javax.swing.JPanel {
         tbnConfirm = new javax.swing.JButton();
         btnDeny = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(0, 51, 51));
+
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("NGO Name:");
 
+        txtName.setFont(new java.awt.Font("Times New Roman", 0, 11)); // NOI18N
         txtName.setEnabled(false);
 
+        jLabel5.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("ZipCode:");
 
+        txtZip.setFont(new java.awt.Font("Times New Roman", 0, 11)); // NOI18N
         txtZip.setEnabled(false);
         txtZip.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -70,14 +85,18 @@ public class SocialProcessJPanel extends javax.swing.JPanel {
             }
         });
 
+        jLabel4.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("CareTaker:");
 
+        cbCareTaker.setFont(new java.awt.Font("Times New Roman", 0, 11)); // NOI18N
         cbCareTaker.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbCareTakerActionPerformed(evt);
             }
         });
 
+        tbnConfirm.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         tbnConfirm.setText("Approve");
         tbnConfirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -85,6 +104,7 @@ public class SocialProcessJPanel extends javax.swing.JPanel {
             }
         });
 
+        btnDeny.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         btnDeny.setText("Disapprove");
         btnDeny.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -96,30 +116,37 @@ public class SocialProcessJPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(73, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(366, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(tbnConfirm)
-                            .addGap(59, 59, 59)
-                            .addComponent(btnDeny))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel4)
-                                .addComponent(jLabel5))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtZip, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(cbCareTaker, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(104, 104, 104))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(85, 85, 85)
+                        .addComponent(cbCareTaker, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(tbnConfirm)
+                                .addGap(59, 59, 59))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addComponent(jLabel3)
+                                    .addGap(77, 77, 77))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel5)
+                                    .addGap(92, 92, 92))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtZip, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(49, 49, 49)
+                                .addComponent(btnDeny)))))
+                .addGap(256, 256, 256))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(34, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(193, 193, 193)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -127,15 +154,15 @@ public class SocialProcessJPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(txtZip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
+                .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbCareTaker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
-                .addGap(37, 37, 37)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 116, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDeny)
                     .addComponent(tbnConfirm))
-                .addGap(75, 75, 75))
+                .addGap(118, 118, 118))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -177,6 +204,8 @@ public class SocialProcessJPanel extends javax.swing.JPanel {
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         userProcessContainer.remove(this);
         layout.previous(userProcessContainer);
+        
+        dB4OUtil.storeSystem(system);
     }//GEN-LAST:event_tbnConfirmActionPerformed
 
     private void btnDenyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDenyActionPerformed
@@ -189,6 +218,8 @@ public class SocialProcessJPanel extends javax.swing.JPanel {
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         userProcessContainer.remove(this);
         layout.previous(userProcessContainer);
+        
+        dB4OUtil.storeSystem(system);
     }//GEN-LAST:event_btnDenyActionPerformed
 
 

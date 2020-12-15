@@ -5,30 +5,37 @@
  */
 package userinterface.HeadquaterRole;
 
+import Business.DB4OUtil.DB4OUtil;
 import Business.EcoSystem;
 import Business.Employee.Employee;
 import Business.Enterprise.Enterprise;
+import Business.Enterprise.GovernmentEnterprise;
+import Business.Network.Network;
 import Business.Organization.CareTakerOrganization;
 import Business.Organization.Organization;
 import Business.Organization.SupplierOrganization;
-import Business.User.User;
 import Business.UserAccount.UserAccount;
 import Business.WorkQueue.InternalWorkRequest;
 import Business.WorkQueue.ExternalWorkRequest;
+import Business.WorkQueue.NotificationRequest;
 import Business.WorkQueue.PlantationWorkRequest;
 import Business.WorkQueue.SocialWorkRequest;
 import Business.WorkQueue.WorkQueue;
 import Business.WorkQueue.WorkRequest;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfTemplate;
+import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.CardLayout;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -36,33 +43,60 @@ import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
-import userinterface.Volunteer.InformerJPanel;
 
 /**
- *
- * @author Am3y
- *
+ * @author Alekhya
+ * @author Apeksha
+ * @author Shalini
  */
 public class HeadquarterManagerJPanel extends javax.swing.JPanel {
 
     private Employee manager;
     private JPanel userProcessContainer;
     private WorkQueue requestQueue;
-    Enterprise enterprise;
-    Organization org;
+    private Enterprise enterprise;
+    private Organization org;
+    private EcoSystem system;
+
+    private DB4OUtil dB4OUtil = DB4OUtil.getInstance();
 
     /**
      * Creates new form Coordinator
      */
-    public HeadquarterManagerJPanel(JPanel userProcessContainer, UserAccount account, Organization org, Enterprise enterprise, EcoSystem business) {
+    public HeadquarterManagerJPanel(JPanel userProcessContainer, UserAccount account, EcoSystem system, Organization org, Enterprise enterprise, EcoSystem business) {
         initComponents();
         this.userProcessContainer = userProcessContainer;
         this.enterprise = enterprise;
+        this.system = system;
         requestQueue = org.getWorkQueue();
         manager = account.getEmployee();
         this.org = org;
+        txtName.setText(manager.getName());
+        txtEmail.setText(manager.getEmailId());
+        txtZipcode.setText(manager.getZip());
+        dpDoB.setDate(manager.getDateOfBirth());
+        if (manager.getGender() != null) {
+            if (manager.getGender().equals("Male")) {
+                CbGender.setSelectedIndex(0);
+            } else {
+                CbGender.setSelectedIndex(1);
+            }
+        }
+        txtContact.setText(manager.getContactNumber());
+        if (manager.getProfilePicture() != null) {
+            profile.setIcon(new ImageIcon(manager.getProfilePicture()));
+        }
+        username7.setText("Welcome " + manager.getUserName() + "!");
         populatePoolTable();
         populateAssignedTable();
+        populateCombo();
+    }
+
+    private void populateCombo() {
+        DefaultComboBoxModel dm = new DefaultComboBoxModel();
+        dm.addElement("Male");
+        dm.addElement("Female");
+        CbGender.setModel(dm);
     }
 
     /**
@@ -101,8 +135,17 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
         assignedRequestTable = new javax.swing.JTable();
         btnAssign = new javax.swing.JButton();
         btnProcess = new javax.swing.JButton();
+        btnDownload = new javax.swing.JButton();
+        username8 = new javax.swing.JLabel();
+        username9 = new javax.swing.JLabel();
+        btnRefresh = new javax.swing.JButton();
+        logout8 = new javax.swing.JLabel();
 
-        btnProfile.setBackground(new java.awt.Color(0, 153, 153));
+        jTabbedPane1.setBackground(new java.awt.Color(0, 51, 51));
+        jTabbedPane1.setForeground(new java.awt.Color(255, 255, 255));
+        jTabbedPane1.setFont(new java.awt.Font("Times New Roman", 2, 18)); // NOI18N
+
+        btnProfile.setBackground(new java.awt.Color(0, 51, 51));
 
         lblName7.setFont(new java.awt.Font("Times New Roman", 2, 14)); // NOI18N
         lblName7.setForeground(new java.awt.Color(255, 255, 255));
@@ -116,7 +159,7 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
 
         logout7.setFont(new java.awt.Font("Times New Roman", 2, 14)); // NOI18N
         logout7.setForeground(new java.awt.Color(255, 255, 255));
-        logout7.setText("Logout");
+        logout7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/logout.png"))); // NOI18N
         logout7.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 logout7MouseClicked(evt);
@@ -181,120 +224,107 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
             }
         });
 
+        dpDoB.setEnabled(false);
+
         javax.swing.GroupLayout btnProfileLayout = new javax.swing.GroupLayout(btnProfile);
         btnProfile.setLayout(btnProfileLayout);
         btnProfileLayout.setHorizontalGroup(
             btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(btnProfileLayout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(username7, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(logout7)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnProfileLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnUpdate7)
                 .addGap(148, 148, 148)
-                .addComponent(dpDoB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(643, Short.MAX_VALUE))
-            .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(btnProfileLayout.createSequentialGroup()
-                    .addGap(28, 28, 28)
-                    .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(btnProfileLayout.createSequentialGroup()
-                            .addGap(57, 57, 57)
-                            .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(btnProfileLayout.createSequentialGroup()
-                                    .addComponent(lblName7)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(txtName))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnProfileLayout.createSequentialGroup()
-                                    .addGap(0, 0, Short.MAX_VALUE)
-                                    .addComponent(lblName8)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGap(408, 408, 408)
-                            .addComponent(profile, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(65, 65, 65))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnProfileLayout.createSequentialGroup()
-                            .addGap(577, 577, 577)
-                            .addComponent(username7, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(31, 31, 31)
-                            .addComponent(logout7, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(btnProfileLayout.createSequentialGroup()
-                            .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(btnProfileLayout.createSequentialGroup()
-                                    .addGap(280, 280, 280)
-                                    .addComponent(btnUpdate7)
-                                    .addGap(147, 147, 147)
-                                    .addComponent(btnSave7, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(btnProfileLayout.createSequentialGroup()
-                                    .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(btnProfileLayout.createSequentialGroup()
-                                            .addGap(6, 6, 6)
-                                            .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(btnProfileLayout.createSequentialGroup()
-                                                    .addGap(36, 36, 36)
-                                                    .addComponent(lblGender6))
-                                                .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                    .addComponent(lblZipcode6)
-                                                    .addComponent(lblDoB6))))
-                                        .addComponent(lblContact6))
-                                    .addGap(21, 21, 21)
-                                    .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(btnProfileLayout.createSequentialGroup()
-                                            .addComponent(CbGender, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(btnProfile7))
-                                        .addGroup(btnProfileLayout.createSequentialGroup()
-                                            .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(txtContact, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(txtZipcode, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGap(0, 0, Short.MAX_VALUE)))))
-                            .addGap(205, 205, 205)))
-                    .addGap(29, 29, 29)))
+                .addComponent(btnSave7, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(284, 284, 284))
+            .addGroup(btnProfileLayout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(btnProfileLayout.createSequentialGroup()
+                        .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblDoB6)
+                            .addComponent(lblZipcode6))
+                        .addGap(60, 60, 60)
+                        .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtZipcode, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dpDoB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 265, Short.MAX_VALUE)
+                        .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnProfileLayout.createSequentialGroup()
+                                .addComponent(btnProfile7)
+                                .addGap(184, 184, 184))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnProfileLayout.createSequentialGroup()
+                                .addComponent(profile, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(218, 218, 218))))
+                    .addGroup(btnProfileLayout.createSequentialGroup()
+                        .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblContact6)
+                            .addComponent(lblGender6)
+                            .addGroup(btnProfileLayout.createSequentialGroup()
+                                .addGap(2, 2, 2)
+                                .addComponent(lblName7))
+                            .addComponent(lblName8))
+                        .addGap(44, 44, 44)
+                        .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtEmail)
+                                .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(CbGender, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtContact, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))))
         );
         btnProfileLayout.setVerticalGroup(
             btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(btnProfileLayout.createSequentialGroup()
-                .addGap(244, 244, 244)
-                .addComponent(dpDoB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(309, Short.MAX_VALUE))
-            .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(btnProfileLayout.createSequentialGroup()
-                    .addGap(27, 27, 27)
+                .addContainerGap()
+                .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(logout7)
+                    .addComponent(username7, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(49, 49, 49)
+                .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(profile, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(btnProfileLayout.createSequentialGroup()
+                        .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblName7)
+                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(26, 26, 26)
+                        .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblName8)
+                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(23, 23, 23)
+                        .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblGender6)
+                            .addComponent(CbGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(18, 18, 18)
+                .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnProfile7)
                     .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(logout7, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(username7, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(34, 34, 34)
-                    .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(btnProfileLayout.createSequentialGroup()
-                            .addComponent(profile, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(0, 0, Short.MAX_VALUE))
-                        .addGroup(btnProfileLayout.createSequentialGroup()
-                            .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(lblName7)
-                                .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-                            .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lblName8))
-                            .addGap(24, 24, 24)
-                            .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(lblGender6)
-                                .addComponent(CbGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnProfile7))
-                            .addGap(23, 23, 23)
-                            .addComponent(lblDoB6)
-                            .addGap(34, 34, 34)
-                            .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(lblZipcode6)
-                                .addComponent(txtZipcode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(32, 32, 32)
-                            .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(lblContact6)
-                                .addComponent(txtContact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(154, 154, 154)))
-                    .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnUpdate7)
-                        .addComponent(btnSave7))
-                    .addGap(28, 28, 28)))
+                        .addComponent(lblDoB6)
+                        .addComponent(dpDoB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(26, 26, 26)
+                .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtZipcode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblZipcode6))
+                .addGap(30, 30, 30)
+                .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblContact6)
+                    .addComponent(txtContact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
+                .addGroup(btnProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSave7)
+                    .addComponent(btnUpdate7))
+                .addGap(100, 100, 100))
         );
 
         jTabbedPane1.addTab("Profile", btnProfile);
 
+        jPanel2.setBackground(new java.awt.Color(0, 51, 51));
+
+        requestPoolTable.setFont(new java.awt.Font("Times New Roman", 0, 11)); // NOI18N
         requestPoolTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
@@ -323,6 +353,7 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(requestPoolTable);
 
+        assignedRequestTable.setFont(new java.awt.Font("Times New Roman", 0, 11)); // NOI18N
         assignedRequestTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
@@ -351,6 +382,7 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(assignedRequestTable);
 
+        btnAssign.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         btnAssign.setText("Assign to me");
         btnAssign.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -358,10 +390,44 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
             }
         });
 
+        btnProcess.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         btnProcess.setText("Process");
         btnProcess.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnProcessActionPerformed(evt);
+            }
+        });
+
+        btnDownload.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnDownload.setText("Dowload Table");
+        btnDownload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDownloadActionPerformed(evt);
+            }
+        });
+
+        username8.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        username8.setForeground(new java.awt.Color(255, 255, 255));
+        username8.setText("Request Pool Table");
+
+        username9.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        username9.setForeground(new java.awt.Color(255, 255, 255));
+        username9.setText("Request Pool Table");
+
+        btnRefresh.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnRefresh.setText("Refresh");
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
+
+        logout8.setFont(new java.awt.Font("Times New Roman", 2, 14)); // NOI18N
+        logout8.setForeground(new java.awt.Color(255, 255, 255));
+        logout8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/logout.png"))); // NOI18N
+        logout8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                logout8MouseClicked(evt);
             }
         });
 
@@ -371,30 +437,56 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(70, 70, 70)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 778, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 778, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnDownload)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnProcess, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(336, 336, 336)))
-                .addContainerGap(47, Short.MAX_VALUE))
+                        .addGap(226, 226, 226)
+                        .addComponent(btnRefresh))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 778, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 778, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 400, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(username8, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAssign, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(310, 310, 310))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnAssign, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(393, 393, 393))
+                .addComponent(logout8)
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                    .addContainerGap(405, Short.MAX_VALUE)
+                    .addComponent(username9, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(305, 305, 305)))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
+                .addContainerGap()
+                .addComponent(logout8)
+                .addGap(20, 20, 20)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnAssign, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnProcess, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(110, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addComponent(username8, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnProcess, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDownload, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGap(21, 21, 21)
+                    .addComponent(username9, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(510, Short.MAX_VALUE)))
         );
 
         jTabbedPane1.addTab("Request", jPanel2);
@@ -453,7 +545,7 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
         }
         for (SocialWorkRequest request : requestQueue.getSocialList()) {
             System.out.println("social");
-            if (request.getManager()== null) {
+            if (request.getManager() == null) {
                 Object row[] = new Object[5];
                 row[0] = request;
                 row[1] = request.getOrg().getName();
@@ -520,6 +612,10 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         int selectedRow = requestPoolTable.getSelectedRow();
 
+        if (manager.isCompleteProfile() == false) {
+            JOptionPane.showMessageDialog(null, "Please complete your profile first", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         if (selectedRow < 0) {
             JOptionPane.showMessageDialog(null, "Please select a row!");
             return;
@@ -528,36 +624,41 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
         if (requestPoolTable.getValueAt(selectedRow, 2).equals("unassigned")) {
             if (request1 instanceof InternalWorkRequest) {
                 System.out.println("Cordinator");
+                request1.setOverallStatus("initiated");
                 InternalWorkRequest request = (InternalWorkRequest) requestPoolTable.getValueAt(selectedRow, 0);
                 request.setCoordinatorAssigned(manager);
                 request.setStatus("Assigned to " + manager.getName());
                 manager.addEmployeeRequest(request);
-            } else if(request1 instanceof ExternalWorkRequest){
+            } else if (request1 instanceof ExternalWorkRequest) {
                 System.out.println("External");
                 ExternalWorkRequest request = (ExternalWorkRequest) requestPoolTable.getValueAt(selectedRow, 0);
                 request.setCoordinatorAssigned(manager);
+                request1.setOverallStatus("initiated");
                 request.setStatus("Assigned to " + manager.getName());
                 manager.addUserRequest(request);
-            }else if(request1 instanceof PlantationWorkRequest){
+            } else if (request1 instanceof PlantationWorkRequest) {
                 System.out.println("Outer");
                 PlantationWorkRequest request = (PlantationWorkRequest) requestPoolTable.getValueAt(selectedRow, 0);
                 request.setCoordinatorAssigned(manager);
+                request1.setOverallStatus("initiated");
                 request.setStatus("Assigned to " + manager.getName());
                 manager.addVolunteerRequest(request);
-            }else{
+            } else {
                 SocialWorkRequest request = (SocialWorkRequest) requestPoolTable.getValueAt(selectedRow, 0);
                 request.setManager(manager);
+                request1.setOverallStatus("initiated");
                 request.setStatus("Assigned to " + manager.getName());
                 manager.addSocialRequest(request);
             }
             System.out.println(requestPoolTable.getValueAt(selectedRow, 0));
-
             JOptionPane.showMessageDialog(null, "Request assigned ", "Info", JOptionPane.INFORMATION_MESSAGE);
             populatePoolTable();
             populateAssignedTable();
         } else {
             JOptionPane.showMessageDialog(null, "The request is already assigned!", "Error", JOptionPane.INFORMATION_MESSAGE);
         }
+
+        dB4OUtil.storeSystem(system);
     }//GEN-LAST:event_btnAssignActionPerformed
 
     private void btnProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcessActionPerformed
@@ -566,6 +667,15 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
         int selectedRow = assignedRequestTable.getSelectedRow();
         if (selectedRow < 0) {
             JOptionPane.showMessageDialog(null, "Please select a request!");
+            return;
+        }
+        if (manager.isCompleteProfile() == false) {
+            JOptionPane.showMessageDialog(null, "Please complete your profile first", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        WorkRequest r = (WorkRequest) assignedRequestTable.getValueAt(selectedRow, 0);
+        if (r.getOverallStatus().equals("Processed") || r.getStatus().equals("Declined")) {
+            JOptionPane.showMessageDialog(null, "Already Processed! Refresh the table.");
             return;
         }
 
@@ -579,11 +689,21 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
                     break;
                 }
             }
-            InternalProcessJPanel panel = new InternalProcessJPanel(userProcessContainer, org, enterprise, request);
+            Network network = null;
+            for (Network n : system.getNetworkList()) {
+                for (Enterprise e : n.getEnterpriseDirectory().getEnterpriseList()) {
+                    if (e == enterprise) {
+                        network = n;
+                        break;
+                    }
+                }
+            }
+            request.setOverallStatus("Processed");
+            InternalProcessJPanel panel = new InternalProcessJPanel(userProcessContainer, org, network, enterprise, request, system);
             userProcessContainer.add("ProcessJPanel", panel);
             CardLayout layout = (CardLayout) userProcessContainer.getLayout();
             layout.next(userProcessContainer);
-        } else if(assignedRequestTable.getValueAt(selectedRow, 0) instanceof PlantationWorkRequest){
+        } else if (assignedRequestTable.getValueAt(selectedRow, 0) instanceof PlantationWorkRequest) {
             System.out.println("Plantation");
             for (Organization o : enterprise.getOrganizationDirectory().getOrganizationList()) {
                 if (o instanceof CareTakerOrganization) {
@@ -591,20 +711,21 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
                     break;
                 }
             }
-           PlantationWorkRequest request = (PlantationWorkRequest) assignedRequestTable.getValueAt(selectedRow, 0);
-           PoolProcessJPanel panel = new PoolProcessJPanel(userProcessContainer, org, request);
+            PlantationWorkRequest request = (PlantationWorkRequest) assignedRequestTable.getValueAt(selectedRow, 0);
+            request.setOverallStatus("Processed");
+            PoolProcessJPanel panel = new PoolProcessJPanel(userProcessContainer, org, request, system);
             userProcessContainer.add("PoolProcessJPanel", panel);
             CardLayout layout = (CardLayout) userProcessContainer.getLayout();
             layout.next(userProcessContainer);
-        }
-        else if(assignedRequestTable.getValueAt(selectedRow, 0) instanceof ExternalWorkRequest){
-             System.out.println("External!!");
+        } else if (assignedRequestTable.getValueAt(selectedRow, 0) instanceof ExternalWorkRequest) {
+            System.out.println("External!!");
             ExternalWorkRequest request = (ExternalWorkRequest) assignedRequestTable.getValueAt(selectedRow, 0);
-            ProcessJPanel panel = new ProcessJPanel(userProcessContainer, request);
+            request.setOverallStatus("Processed");
+            ProcessJPanel panel = new ProcessJPanel(userProcessContainer, request, system);
             userProcessContainer.add("ProcessJPanel", panel);
             CardLayout layout = (CardLayout) userProcessContainer.getLayout();
             layout.next(userProcessContainer);
-        }else{
+        } else {
             for (Organization o : enterprise.getOrganizationDirectory().getOrganizationList()) {
                 if (o instanceof CareTakerOrganization) {
                     org = o;
@@ -612,12 +733,32 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
                 }
             }
             SocialWorkRequest request = (SocialWorkRequest) assignedRequestTable.getValueAt(selectedRow, 0);
-            SocialProcessJPanel panel = new SocialProcessJPanel(userProcessContainer, org, request);
+            request.setOverallStatus("Processed");
+            SocialProcessJPanel panel = new SocialProcessJPanel(userProcessContainer, org, request, system);
+            NotificationRequest notify = new NotificationRequest();
+            notify.setHeadquaterManager(manager);
+            notify.setInformer(request.getUser());
+            notify.setStatus("Plantation");
+            notify.setTreeCount(request.getTreeCount());
+            notify.setType("Plantation");
+            notify.setZipcode(request.getZipcode());
+
+            for (Enterprise e : request.getUser().getNetwork().getEnterpriseDirectory().getEnterpriseList()) {
+                if (e instanceof GovernmentEnterprise) {
+                    for (Organization o : e.getOrganizationDirectory().getOrganizationList()) {
+                        o.getWorkQueue().getNotificationList().add(notify);
+                        System.out.println(o.getName() + o.getWorkQueue().getNotificationList().size());
+                        break;
+                    }
+                }
+            }
             userProcessContainer.add("SocialProcessJPanel", panel);
             CardLayout layout = (CardLayout) userProcessContainer.getLayout();
             layout.next(userProcessContainer);
+            populateAssignedTable();
         }
 
+        dB4OUtil.storeSystem(system);
     }//GEN-LAST:event_btnProcessActionPerformed
 
     private void btnProfile7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProfile7ActionPerformed
@@ -631,7 +772,8 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
             File file = jFC.getSelectedFile();
             try {
                 BufferedImage img = null;
-                manager.setProfilePicture(file);
+                manager.setProfilePicture(file.getAbsolutePath());
+                System.out.println(file.getAbsolutePath());
                 img = ImageIO.read(file);
                 Image resizedImg = img.getScaledInstance(80,
                         60, Image.SCALE_SMOOTH);
@@ -650,6 +792,7 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
         btnProfile.setEnabled(true);
         CbGender.setEnabled(true);
         dpDoB.setEnabled(true);
+        btnProfile7.setEnabled(true);
 
         btnSave7.setEnabled(true);
         btnUpdate7.setEnabled(false);
@@ -658,20 +801,42 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
     private void btnSave7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSave7ActionPerformed
         // TODO add your handling code here:
 
-        manager.setName(txtName.toString());
-        manager.setGender(CbGender.toString());
-        manager.setContactNumber(txtContact.toString());
-        manager.setZip(txtZipcode.toString());
+        manager.setName(txtName.getText());
+        manager.setGender((String) CbGender.getSelectedItem());
+        manager.setContactNumber(txtContact.getText());
+        manager.setZip(txtZipcode.getText());
         manager.setDateOfBirth(dpDoB.getDate());
+        try {
+            int num = Integer.parseInt(txtContact.getText());
+            int zip = Integer.parseInt(txtZipcode.getText());
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Enter valid Numbers!", "Error", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        if (txtName.getText() == null || txtName.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Enter Valid Name!", "Error", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        if (new Date().compareTo(dpDoB.getDate()) < 0) {
+            JOptionPane.showMessageDialog(null, "Enter Valid DOB!", "Error", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        if (manager.getContactNumber() != null && manager.getZip() != null && manager.getDateOfBirth() != null && manager.getProfilePicture() != null) {
+            manager.setCompleteProfile(true);
+        }
 
         txtName.setEnabled(false);
         txtZipcode.setEnabled(false);
         txtContact.setEnabled(false);
-        btnProfile.setEnabled(false);
+        btnProfile7.setEnabled(false);
         CbGender.setEnabled(false);
         dpDoB.setEnabled(false);
         btnSave7.setEnabled(false);
         btnUpdate7.setEnabled(true);
+
+        dB4OUtil.storeSystem(system);
     }//GEN-LAST:event_btnSave7ActionPerformed
 
     private void logout7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logout7MouseClicked
@@ -682,14 +847,53 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
         layout.previous(userProcessContainer);
     }//GEN-LAST:event_logout7MouseClicked
 
+    private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
+        // TODO add your handling code here:
+        if (manager.isCompleteProfile() == false) {
+            JOptionPane.showMessageDialog(null, "Please complete your profile first", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        Document document = new Document();
+        try {
+            PdfWriter writer;
+            writer = PdfWriter.getInstance(document,
+                    new FileOutputStream("RequestHistoryTable.pdf"));
+            document.open();
+            PdfContentByte cb = writer.getDirectContent();
+            PdfTemplate tp = cb.createTemplate(500, 500);
+            Graphics2D g2;
+            g2 = tp.createGraphicsShapes(500, 500);
+            assignedRequestTable.print(g2);
+            g2.dispose();
+            cb.addTemplate(tp, 30, 300);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        document.close();
+    }//GEN-LAST:event_btnDownloadActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        // TODO add your handling code here:
+        populateAssignedTable();
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void logout8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logout8MouseClicked
+        // TODO add your handling code here:
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        userProcessContainer.remove(this);
+        layout.previous(userProcessContainer);
+    }//GEN-LAST:event_logout8MouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> CbGender;
     private javax.swing.JTable assignedRequestTable;
     private javax.swing.JButton btnAssign;
+    private javax.swing.JButton btnDownload;
     private javax.swing.JButton btnProcess;
     private javax.swing.JPanel btnProfile;
     private javax.swing.JButton btnProfile7;
+    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSave7;
     private javax.swing.JButton btnUpdate7;
     private org.jdesktop.swingx.JXDatePicker dpDoB;
@@ -704,6 +908,7 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblName8;
     private javax.swing.JLabel lblZipcode6;
     private javax.swing.JLabel logout7;
+    private javax.swing.JLabel logout8;
     private javax.swing.JLabel profile;
     private javax.swing.JTable requestPoolTable;
     private javax.swing.JTextField txtContact;
@@ -711,5 +916,7 @@ public class HeadquarterManagerJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtZipcode;
     private javax.swing.JLabel username7;
+    private javax.swing.JLabel username8;
+    private javax.swing.JLabel username9;
     // End of variables declaration//GEN-END:variables
 }
