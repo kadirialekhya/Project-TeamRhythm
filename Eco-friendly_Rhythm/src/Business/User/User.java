@@ -13,9 +13,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
+
 /**
- *
- * @author alekhya
+ * @author Alekhya
+ * @author Apeksha
+ * @author Shalini
  */
 public class User {
   
@@ -36,7 +38,7 @@ public class User {
     public void setNetwork(Network network) {
         this.network = network;
     }
-    private File profilePicture;
+    private String profilePicture;
     private ArrayList<WorkRequest> userRequestList ;
     private ArrayList<SocialWorkRequest> socialRequestList ;
     private ArrayList<PlantationWorkRequest> plantationRequestList ;
@@ -50,11 +52,11 @@ public class User {
         this.completeProfile = completeProfile;
     }
 
-    public File getProfilePicture() {
+    public String getProfilePicture() {
         return profilePicture;
     }
 
-    public void setProfilePicture(File profilePicture) {
+    public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
     }
 

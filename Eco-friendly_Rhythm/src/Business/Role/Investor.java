@@ -28,7 +28,7 @@ public class Investor extends Role {
             Organization organization, 
             Enterprise enterprise, 
             EcoSystem business) {
-        return new InvestorJPanel(userProcessContainer,business);
+        return new InvestorJPanel(userProcessContainer,account, enterprise, business);
 //        userProcessContainer.add("InvestorJPanel",jpanel);
 //        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
 //        layout.next(userProcessContainer);

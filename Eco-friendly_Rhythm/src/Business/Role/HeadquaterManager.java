@@ -28,7 +28,7 @@ public class HeadquaterManager extends Role {
             Organization organization, 
             Enterprise enterprise, 
             EcoSystem business){
-        return new HeadquarterManagerJPanel(userProcessContainer, account, organization, enterprise, business);
+        return new HeadquarterManagerJPanel(userProcessContainer, account, business, organization, enterprise, business);
     }
     
     
