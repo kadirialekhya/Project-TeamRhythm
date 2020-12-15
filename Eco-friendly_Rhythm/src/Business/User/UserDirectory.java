@@ -9,8 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- *
- * @author alekhya
+ * @author Alekhya
+ * @author Apeksha
+ * @author Shalini
  */
 public class UserDirectory {
          ArrayList<User> userList;

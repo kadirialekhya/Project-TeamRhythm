@@ -28,7 +28,7 @@ public class Logistics extends Role{
             Organization organization, 
             Enterprise enterprise, 
             EcoSystem business) {
-        return new LogisticsJPanel(userProcessContainer,business);
+        return new LogisticsJPanel(userProcessContainer, account, organization, business);
 //        userProcessContainer.add("LogisticsJPanel",jpanel);
 //        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
 //        layout.next(userProcessContainer);
