@@ -7,9 +7,11 @@ package Business.WorkQueue;
 
 import Business.WorkQueue.WorkRequest;
 
+
 /**
- *
- * @author Am3y
+ * @author Alekhya
+ * @author Apeksha
+ * @author Shalini
  */
 public class ExternalWorkRequest extends WorkRequest{
     

@@ -4,6 +4,7 @@
  */
 package Business.WorkQueue;
 
+import com.db4o.collections.ActivatableArrayList;
 import java.util.ArrayList;
 
 /**
@@ -19,6 +20,24 @@ public class WorkQueue {
     private ArrayList<PlantationWorkRequest> poolList;
     private ArrayList<NotificationRequest> notificationList;
     private ArrayList<SocialWorkRequest> socialList;
+    private ArrayList<PaymentWorkRequest> paymentList;
+
+    public ArrayList<PaymentWorkRequest> getPaymentList() {
+        return paymentList;
+    }
+
+    public void setPaymentList(ArrayList<PaymentWorkRequest> paymentList) {
+        this.paymentList = paymentList;
+    }
+    private ArrayList<InfoWorkRequest> infoList;
+
+    public ArrayList<InfoWorkRequest> getInfoList() {
+        return infoList;
+    }
+
+    public void setInfoList(ArrayList<InfoWorkRequest> infoList) {
+        this.infoList = infoList;
+    }
 
     public ArrayList<PlantationWorkRequest> getPoolList() {
         return poolList;
@@ -34,6 +53,8 @@ public class WorkQueue {
         poolList = new ArrayList();
         notificationList = new ArrayList();
         socialList = new ArrayList();
+        infoList = new ArrayList();
+        paymentList = new ArrayList();
     }
 
     public ArrayList<SocialWorkRequest> getSocialList() {

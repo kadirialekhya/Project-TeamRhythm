@@ -10,9 +10,11 @@ import Business.Organization.Organization;
 import Business.User.User;
 import java.util.Date;
 
+
 /**
- *
- * @author Am3y
+ * @author Alekhya
+ * @author Apeksha
+ * @author Shalini
  */
 public class PlantationWorkRequest extends WorkRequest{
     
