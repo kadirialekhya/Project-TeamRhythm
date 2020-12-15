@@ -23,8 +23,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 /**
- *
- * @author alekhya
+ * @author Alekhya
+ * @author Apeksha
+ * @author Shalini
  */
 public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
 
@@ -36,46 +37,48 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
     Network network;
     Organization org;
 
+    private DB4OUtil dB4OUtil = DB4OUtil.getInstance();
+
     public SystemAdminWorkAreaJPanel(JPanel userProcessContainer, Organization org, EcoSystem business) {
         initComponents();
-        this.userProcessContainer=userProcessContainer;
-        this.system=business;
-        this.org=org;
+        this.userProcessContainer = userProcessContainer;
+        this.system = business;
+        this.org = org;
         populateNetworkTable();
         populateAdminTable();
         populateComboBox();
     }
-    
-    public void populateNetworkTable(){
-        DefaultTableModel model = (DefaultTableModel)networkTable.getModel();
+
+    public void populateNetworkTable() {
+        DefaultTableModel model = (DefaultTableModel) networkTable.getModel();
         model.setRowCount(0);
-        
-        for(Network network: system.getNetworkList()){
+
+        for (Network network : system.getNetworkList()) {
             Object[] row = new Object[4];
             row[0] = network.getName();
             row[1] = network.getCity();
-            row[2] = network.getState();  
-            row[3] = network.getCountry(); 
+            row[2] = network.getState();
+            row[3] = network.getCountry();
             model.addRow(row);
         }
     }
-    
-    public void populateAdminTable(){
-        DefaultTableModel model = (DefaultTableModel)adminTable.getModel();
+
+    public void populateAdminTable() {
+        DefaultTableModel model = (DefaultTableModel) adminTable.getModel();
         model.setRowCount(0);
-        
-        for(Network network: system.getNetworkList()){
-            for(UserAccount ua: network.getUserAccountDirectory().getUserAccountList()){
+
+        for (Network network : system.getNetworkList()) {
+            for (UserAccount ua : network.getUserAccountDirectory().getUserAccountList()) {
                 Object[] row = new Object[4];
                 row[0] = network.getName();
                 row[1] = ua.getEmployee();
-                row[2] = ua.getUsername();  
-                row[3] = ua.getContactNumber(); 
+                row[2] = ua.getUsername();
+                row[3] = ua.getContactNumber();
                 model.addRow(row);
             }
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -96,12 +99,10 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         txtCountry = new javax.swing.JTextField();
         btnCreateNetwork = new javax.swing.JButton();
-        createEnterpriseButton1 = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         txtCity = new javax.swing.JTextField();
         logout = new javax.swing.JLabel();
         AdminPanel = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         adminTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
@@ -115,11 +116,17 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
         btnCreateNetworkAdmin = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         cbNetwork = new javax.swing.JComboBox<String>();
-        btnCreateNetworkAdmin1 = new javax.swing.JButton();
         logout1 = new javax.swing.JLabel();
 
         setLayout(new java.awt.BorderLayout());
 
+        jTabbedPane1.setBackground(new java.awt.Color(0, 51, 51));
+        jTabbedPane1.setForeground(new java.awt.Color(255, 255, 255));
+        jTabbedPane1.setFont(new java.awt.Font("Times New Roman", 2, 18)); // NOI18N
+
+        NetworkPanel.setBackground(new java.awt.Color(0, 51, 51));
+
+        networkTable.setFont(new java.awt.Font("Times New Roman", 0, 11)); // NOI18N
         networkTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -147,24 +154,33 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
         networkTable.setEnabled(false);
         jScrollPane1.setViewportView(networkTable);
 
+        txtState.setFont(new java.awt.Font("Times New Roman", 0, 11)); // NOI18N
         txtState.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtStateActionPerformed(evt);
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Name");
 
+        txtName.setFont(new java.awt.Font("Times New Roman", 0, 11)); // NOI18N
         txtName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNameActionPerformed(evt);
             }
         });
 
+        jLabel5.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("State");
 
+        jLabel6.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Country");
 
+        txtCountry.setFont(new java.awt.Font("Times New Roman", 0, 11)); // NOI18N
         txtCountry.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCountryActionPerformed(evt);
@@ -172,6 +188,7 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
         });
 
         btnCreateNetwork.setBackground(new java.awt.Color(204, 204, 204));
+        btnCreateNetwork.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         btnCreateNetwork.setText("Create");
         btnCreateNetwork.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -179,16 +196,11 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
             }
         });
 
-        createEnterpriseButton1.setBackground(new java.awt.Color(204, 204, 204));
-        createEnterpriseButton1.setText("Delete");
-        createEnterpriseButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                createEnterpriseButton1ActionPerformed(evt);
-            }
-        });
-
+        jLabel10.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("City");
 
+        txtCity.setFont(new java.awt.Font("Times New Roman", 0, 11)); // NOI18N
         txtCity.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCityActionPerformed(evt);
@@ -209,36 +221,30 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
             .addGroup(NetworkPanelLayout.createSequentialGroup()
                 .addGroup(NetworkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(NetworkPanelLayout.createSequentialGroup()
-                        .addGroup(NetworkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGap(102, 102, 102)
+                        .addGroup(NetworkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(NetworkPanelLayout.createSequentialGroup()
-                                .addGap(102, 102, 102)
-                                .addGroup(NetworkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(NetworkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(NetworkPanelLayout.createSequentialGroup()
-                                            .addGroup(NetworkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGap(29, 29, 29)
-                                            .addGroup(NetworkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addComponent(txtState)
-                                                .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGap(58, 58, 58)
-                                            .addGroup(NetworkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addGroup(NetworkPanelLayout.createSequentialGroup()
-                                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addGap(29, 29, 29)
-                                                    .addComponent(txtCountry))
-                                                .addGroup(NetworkPanelLayout.createSequentialGroup()
-                                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addGap(29, 29, 29)
-                                                    .addComponent(txtCity, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, NetworkPanelLayout.createSequentialGroup()
-                                            .addComponent(btnCreateNetwork, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(244, 244, 244)))
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 633, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(NetworkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(29, 29, 29)
+                                .addGroup(NetworkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(txtState)
+                                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(58, 58, 58)
+                                .addGroup(NetworkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(NetworkPanelLayout.createSequentialGroup()
+                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(29, 29, 29)
+                                        .addComponent(txtCountry))
+                                    .addGroup(NetworkPanelLayout.createSequentialGroup()
+                                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(29, 29, 29)
+                                        .addComponent(txtCity, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jScrollPane1)
                             .addGroup(NetworkPanelLayout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addComponent(createEnterpriseButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnCreateNetwork, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(244, 244, 244)))
                         .addGap(0, 107, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, NetworkPanelLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -251,9 +257,7 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
                 .addComponent(logout)
                 .addGap(8, 8, 8)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38)
-                .addComponent(createEnterpriseButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(67, 67, 67)
+                .addGap(141, 141, 141)
                 .addGroup(NetworkPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -265,16 +269,16 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
                     .addComponent(txtState, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtCountry, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addComponent(btnCreateNetwork, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 72, Short.MAX_VALUE))
+                .addGap(44, 44, 44))
         );
 
         jTabbedPane1.addTab("Networks", NetworkPanel);
 
-        jLabel7.setBackground(new java.awt.Color(55, 96, 128));
-        jLabel7.setText("*Please select a row to update an admin");
+        AdminPanel.setBackground(new java.awt.Color(0, 51, 51));
 
+        adminTable.setFont(new java.awt.Font("Times New Roman", 0, 11)); // NOI18N
         adminTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -305,6 +309,8 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(adminTable);
 
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Name");
 
         enterpriseNameTextField.addActionListener(new java.awt.event.ActionListener() {
@@ -313,6 +319,8 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
             }
         });
 
+        jLabel4.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Contact");
 
         txtContact.addActionListener(new java.awt.event.ActionListener() {
@@ -321,6 +329,8 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
             }
         });
 
+        jLabel8.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Username");
 
         useridTextField.addActionListener(new java.awt.event.ActionListener() {
@@ -329,6 +339,8 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
             }
         });
 
+        jLabel9.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Password");
 
         PasswordField.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -337,6 +349,7 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
             }
         });
 
+        btnCreateNetworkAdmin.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         btnCreateNetworkAdmin.setText("Create");
         btnCreateNetworkAdmin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -344,18 +357,13 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
             }
         });
 
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Network");
 
         cbNetwork.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbNetworkActionPerformed(evt);
-            }
-        });
-
-        btnCreateNetworkAdmin1.setText("Update Admin");
-        btnCreateNetworkAdmin1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCreateNetworkAdmin1ActionPerformed(evt);
             }
         });
 
@@ -370,50 +378,42 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
         AdminPanel.setLayout(AdminPanelLayout);
         AdminPanelLayout.setHorizontalGroup(
             AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(AdminPanelLayout.createSequentialGroup()
-                .addGroup(AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(AdminPanelLayout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addGroup(AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(AdminPanelLayout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(40, 40, 40)
-                                .addComponent(enterpriseNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(AdminPanelLayout.createSequentialGroup()
-                                .addGroup(AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AdminPanelLayout.createSequentialGroup()
-                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(40, 40, 40))
-                                    .addGroup(AdminPanelLayout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addGap(30, 30, 30)))
-                                .addGroup(AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(cbNetwork, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtContact, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE))))
-                        .addGap(80, 80, 80)
-                        .addGroup(AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(useridTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
-                            .addComponent(PasswordField)))
-                    .addGroup(AdminPanelLayout.createSequentialGroup()
-                        .addGap(109, 109, 109)
-                        .addGroup(AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(AdminPanelLayout.createSequentialGroup()
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnCreateNetworkAdmin1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 633, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(153, Short.MAX_VALUE))
-            .addGroup(AdminPanelLayout.createSequentialGroup()
-                .addGap(316, 316, 316)
-                .addComponent(btnCreateNetworkAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AdminPanelLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(logout1))
+            .addGroup(AdminPanelLayout.createSequentialGroup()
+                .addGap(109, 109, 109)
+                .addGroup(AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 633, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(AdminPanelLayout.createSequentialGroup()
+                        .addGroup(AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnCreateNetworkAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(AdminPanelLayout.createSequentialGroup()
+                                .addGroup(AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(AdminPanelLayout.createSequentialGroup()
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(40, 40, 40)
+                                        .addComponent(enterpriseNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(AdminPanelLayout.createSequentialGroup()
+                                        .addGroup(AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AdminPanelLayout.createSequentialGroup()
+                                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(40, 40, 40))
+                                            .addGroup(AdminPanelLayout.createSequentialGroup()
+                                                .addComponent(jLabel3)
+                                                .addGap(30, 30, 30)))
+                                        .addGroup(AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(cbNetwork, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(txtContact, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(35, 35, 35)
+                        .addGroup(AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(useridTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
+                            .addComponent(PasswordField))))
+                .addContainerGap(153, Short.MAX_VALUE))
         );
         AdminPanelLayout.setVerticalGroup(
             AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -421,34 +421,37 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
                 .addComponent(logout1)
                 .addGap(8, 8, 8)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7)
-                    .addComponent(btnCreateNetworkAdmin1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
+                .addGap(90, 90, 90)
                 .addGroup(AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(AdminPanelLayout.createSequentialGroup()
-                        .addComponent(useridTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(PasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(AdminPanelLayout.createSequentialGroup()
+                                .addComponent(useridTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(PasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AdminPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
+                        .addComponent(btnCreateNetworkAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(76, 76, 76))
                     .addGroup(AdminPanelLayout.createSequentialGroup()
                         .addGroup(AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(enterpriseNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(enterpriseNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtContact, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
-                .addGroup(AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(cbNetwork, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
-                .addComponent(btnCreateNetworkAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(76, 76, 76))
+                            .addComponent(txtContact, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(AdminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(AdminPanelLayout.createSequentialGroup()
+                                .addGap(34, 34, 34)
+                                .addComponent(jLabel3))
+                            .addGroup(AdminPanelLayout.createSequentialGroup()
+                                .addGap(26, 26, 26)
+                                .addComponent(cbNetwork, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         jTabbedPane1.addTab("Admin", AdminPanel);
@@ -460,30 +463,26 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCityActionPerformed
 
-    private void createEnterpriseButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createEnterpriseButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_createEnterpriseButton1ActionPerformed
-
     private void btnCreateNetworkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateNetworkActionPerformed
         // TODO add your handling code here:
 
-        if (txtName.getText().isEmpty() || txtState.getText().isEmpty() || txtCountry.getText().isEmpty() ){
-            JOptionPane.showMessageDialog(null, "All fields mandatory" , "Error", JOptionPane.ERROR_MESSAGE);
+        if (txtName.getText().isEmpty() || txtState.getText().isEmpty() || txtCountry.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "All fields mandatory", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        for ( Network network :system.getNetworkList()){
+        for (Network network : system.getNetworkList()) {
 
-            if( network.getName().equals(txtName.getText())) {
-                JOptionPane.showMessageDialog(null, "Network name cannot be same" , "Error", JOptionPane.ERROR_MESSAGE);
+            if (network.getName().equals(txtName.getText())) {
+                JOptionPane.showMessageDialog(null, "Network name cannot be same", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }
 
-        String networkName      = txtName.getText();
-        String networkCity      = txtCity.getText();
-        String networkState      = txtState.getText();
-        String networkCountry      = txtCountry.getText();
+        String networkName = txtName.getText();
+        String networkCity = txtCity.getText();
+        String networkState = txtState.getText();
+        String networkCountry = txtCountry.getText();
 
         if (networkName.length() > 0) {
             Network network = system.createAndAddNetwork();
@@ -500,15 +499,15 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
             txtCountry.setText("");
             populateNetworkTable();
             populateComboBox();
-        }
-        else {
+        } else {
 
             JOptionPane.showMessageDialog(null, "Please mention the network name");
 
         }
+
+        dB4OUtil.storeSystem(system);
     }//GEN-LAST:event_btnCreateNetworkActionPerformed
 
-    
     public void populateComboBox() {
         DefaultComboBoxModel dm = new DefaultComboBoxModel();
         for (Network n : system.getNetworkList()) {
@@ -516,7 +515,7 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
         }
         cbNetwork.setModel(dm);
     }
-    
+
     private void txtCountryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCountryActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCountryActionPerformed
@@ -529,10 +528,6 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtStateActionPerformed
 
-    private void btnCreateNetworkAdmin1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateNetworkAdmin1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCreateNetworkAdmin1ActionPerformed
-
     private void cbNetworkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbNetworkActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbNetworkActionPerformed
@@ -541,15 +536,16 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         int selectedRow = adminTable.getSelectedRow();
 
-        if (useridTextField.getText().isEmpty() || txtContact.getText().isEmpty()){
-            JOptionPane.showMessageDialog(null, "All fields mandatory","Warning",JOptionPane.WARNING_MESSAGE);
+        if (useridTextField.getText().isEmpty() || txtContact.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "All fields mandatory", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         for (Network n : system.getNetworkList()) {
-            System.out.println(system+" "+n);
-            if(n.getUserAccountDirectory()==null)
+            System.out.println(system + " " + n);
+            if (n.getUserAccountDirectory() == null) {
                 break;
+            }
             for (UserAccount ua : n.getUserAccountDirectory().getUserAccountList()) {
                 if (ua.getUsername().equals(useridTextField.getText())) {
                     JOptionPane.showMessageDialog(null, "Username should be unique. UserName is already in use.");
@@ -557,29 +553,29 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
                 }
             }
         }
-        if (PasswordField.getText().length() < 6 ){
+        if (PasswordField.getText().length() < 6) {
 
-            JOptionPane.showMessageDialog(null, "Password should be more than 6 characters","Warning",JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Password should be more than 6 characters", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         String adminName = txtContact.getText();
-            String userid = useridTextField.getText();
-            String password = String.valueOf(PasswordField.getPassword());
-            String contact = txtContact.getText();
-            Network currentNetwork = (Network)cbNetwork.getSelectedItem();
+        String userid = useridTextField.getText();
+        String password = String.valueOf(PasswordField.getPassword());
+        String contact = txtContact.getText();
+        Network currentNetwork = (Network) cbNetwork.getSelectedItem();
 
-            Employee employee = org.getEmployeeDirectory().createEmployee(adminName);
-            UserAccount admin = currentNetwork.getUserAccountDirectory().createEmployeeAccount(userid, password, contact, employee, new AdminRole());
-            JOptionPane.showMessageDialog(null, "User " + userid + " is created sucessfully");
+        Employee employee = org.getEmployeeDirectory().createEmployee(adminName);
+        UserAccount admin = currentNetwork.getUserAccountDirectory().createEmployeeAccount(userid, password, contact, employee, new AdminRole());
+        JOptionPane.showMessageDialog(null, "User " + userid + " is created sucessfully");
 
-            txtContact.setText("");
-            useridTextField.setText("");
-            PasswordField.setText("");
-            enterpriseNameTextField.setText("");
-            populateAdminTable();
-            
-        
+        txtContact.setText("");
+        useridTextField.setText("");
+        PasswordField.setText("");
+        enterpriseNameTextField.setText("");
+        populateAdminTable();
+
+        dB4OUtil.storeSystem(system);
     }//GEN-LAST:event_btnCreateNetworkAdminActionPerformed
 
     private void PasswordFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_PasswordFieldFocusGained
@@ -605,7 +601,7 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
 
     private void logout1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logout1MouseClicked
         // TODO add your handling code here:
-        
+
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         userProcessContainer.remove(this);
         layout.previous(userProcessContainer);
@@ -613,7 +609,7 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
 
     private void logoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutMouseClicked
         // TODO add your handling code here:
-        
+
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         userProcessContainer.remove(this);
         layout.previous(userProcessContainer);
@@ -627,9 +623,7 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
     private javax.swing.JTable adminTable;
     private javax.swing.JButton btnCreateNetwork;
     private javax.swing.JButton btnCreateNetworkAdmin;
-    private javax.swing.JButton btnCreateNetworkAdmin1;
     private javax.swing.JComboBox<String> cbNetwork;
-    private javax.swing.JButton createEnterpriseButton1;
     private javax.swing.JTextField enterpriseNameTextField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -638,7 +632,6 @@ public class SystemAdminWorkAreaJPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
