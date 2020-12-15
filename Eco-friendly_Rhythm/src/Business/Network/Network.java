@@ -23,6 +23,15 @@ public class Network {
     private UserAccountDirectory userAccountDirectory;
     private WorkQueue poolWorkQueue;
     private EnterpriseDirectory enterpriseDirectory;
+    private int funds;
+
+    public int getFunds() {
+        return funds;
+    }
+
+    public void setFunds(int funds) {
+        this.funds = funds;
+    }
 
     public String getCity() {
         return city;

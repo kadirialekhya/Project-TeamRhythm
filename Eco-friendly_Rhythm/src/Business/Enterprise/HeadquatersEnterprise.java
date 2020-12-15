@@ -9,6 +9,7 @@ import Business.Enterprise.Enterprise.EnterpriseType;
 import Business.Role.CareTaker;
 import Business.Role.HeadquaterManager;
 import Business.Role.Investor;
+import Business.Role.Logistics;
 import Business.Role.Role;
 import Business.Role.Supplier;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class HeadquatersEnterprise extends Enterprise{
         roles.add(new Investor());
         roles.add(new HeadquaterManager());
         roles.add(new CareTaker());
+        roles.add(new Logistics());
         return roles;
     }
     
