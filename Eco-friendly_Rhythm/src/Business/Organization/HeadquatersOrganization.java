@@ -11,6 +11,7 @@ import Business.Role.Supplier;
 import java.util.ArrayList;
 import Business.Role.HeadquaterManager;
 import Business.Role.Investor;
+import Business.Role.Logistics;
 
 /**
  * @author Alekhya
@@ -19,7 +20,7 @@ import Business.Role.Investor;
  */
 
 public class HeadquatersOrganization extends Organization {
-
+    
     public HeadquatersOrganization() {
         super(Organization.Type.Headquaters.getValue());
     }
@@ -27,10 +28,7 @@ public class HeadquatersOrganization extends Organization {
     @Override
     public ArrayList<Role> getSupportedRole() {
         ArrayList<Role> roles = new ArrayList();
-        roles.add(new Supplier());
-        roles.add(new Investor());
         roles.add(new HeadquaterManager());
-        roles.add(new CareTaker());
         return roles;
     }
 }

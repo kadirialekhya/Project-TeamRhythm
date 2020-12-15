@@ -35,6 +35,10 @@ public class OrganizationDirectory {
             organization = new HeadquatersOrganization();
             organizationList.add(organization);
         }
+        else if (type.getValue().equals(Type.Logistic.getValue())){
+            organization = new LogisticOrganization();
+            organizationList.add(organization);
+        }
         else if (type.getValue().equals(Type.Investor.getValue())){
             organization = new InvestorOrganization();
             organizationList.add(organization);
