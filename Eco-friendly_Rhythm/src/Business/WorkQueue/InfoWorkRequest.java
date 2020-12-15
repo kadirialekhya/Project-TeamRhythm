@@ -7,36 +7,67 @@ package Business.WorkQueue;
 
 import Business.Employee.Employee;
 import Business.Network.Network;
+import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import java.util.Date;
+import org.jfree.data.general.DefaultPieDataset;
+
 
 /**
- *
- * @author Am3y
+ * @author Alekhya
+ * @author Apeksha
+ * @author Shalini
  */
 public class InfoWorkRequest {
     
-    private Date fromDate;
-    private Date toDate;
+    private Date requestedDate;
+    private String status;
+    private DefaultPieDataset pieChart;
+
+    public DefaultPieDataset getPieChart() {
+        return pieChart;
+    }
+
+    public void setPieChart(DefaultPieDataset pieChart) {
+        this.pieChart = pieChart;
+    }
+    
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Date getRequestedDate() {
+        return requestedDate;
+    }
+
+    public void setRequestedDate(Date requestedDate) {
+        this.requestedDate = requestedDate;
+    }
+    private Employee requestor;
     private UserAccount ua;
+
+    public Employee getRequestor() {
+        return requestor;
+    }
+
+    public void setRequestor(Employee requestor) {
+        this.requestor = requestor;
+    }
     private Network network;
+    private Organization organization;
 
-    public Date getFromDate() {
-        return fromDate;
+    public Organization getOrganization() {
+        return organization;
     }
 
-    public void setFromDate(Date fromDate) {
-        this.fromDate = fromDate;
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
-
-    public Date getToDate() {
-        return toDate;
-    }
-
-    public void setToDate(Date toDate) {
-        this.toDate = toDate;
-    }
-
+    
     public UserAccount getUa() {
         return ua;
     }
@@ -55,6 +86,6 @@ public class InfoWorkRequest {
 
     @Override
     public String toString() {
-        return "InfoWorkRequest";
+        return requestedDate.toString();
     }
 }

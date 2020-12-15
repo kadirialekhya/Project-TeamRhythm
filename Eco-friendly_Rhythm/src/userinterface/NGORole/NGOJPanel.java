@@ -4,6 +4,7 @@
  */
 package userinterface.NGORole;
 
+import Business.DB4OUtil.DB4OUtil;
 import Business.EcoSystem;
 import Business.Enterprise.Enterprise;
 import Business.Enterprise.GovernmentEnterprise;
@@ -19,7 +20,9 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import javax.imageio.ImageIO;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -30,17 +33,20 @@ import javax.swing.table.DefaultTableModel;
 import userinterface.HeadquaterRole.HeadquarterManagerJPanel;
 
 /**
- *
- * @author alekhya
+ * @author Alekhya
+ * @author Apeksha
+ * @author Shalini
  */
 public class NGOJPanel extends javax.swing.JPanel {
 
     private JPanel userProcessContainer;
-    private EcoSystem business;
+    private EcoSystem system;
     private UserAccount userAccount;
     Organization organization;
-     private User user;
-    
+    private User user;
+
+    private DB4OUtil dB4OUtil = DB4OUtil.getInstance();
+
     /**
      * Creates new form LabAssistantWorkAreaJPanel
      */
@@ -48,14 +54,37 @@ public class NGOJPanel extends javax.swing.JPanel {
         initComponents();
         this.userProcessContainer = userProcessContainer;
         this.userAccount = account;
-        this.business = business;  
-        this.organization =organization;
+        this.system = business;
+        this.organization = organization;
         user = account.getUser();
         populatePoolTable();
         populateMeetingTable();
         populateHistoryTable();
+        txtName.setText(user.getName());
+        txtEmail.setText(user.getEmailId());
+        txtZipcode.setText(user.getZip());
+        dpDoB.setDate(user.getDateOfBirth());
+        if (user.getGender() != null) {
+            if (user.getGender().equals("Male")) {
+                CbGender.setSelectedIndex(0);
+            } else {
+                CbGender.setSelectedIndex(1);
+            }
+        }
+        txtContact.setText(user.getContactNumber());
+        if (user.getProfilePicture() != null) {
+            profile.setIcon(new ImageIcon(user.getProfilePicture()));
+        }
+        username1.setText("Welcome " + user.getUserName() + "!");
+        populateCombo();
     }
-    
+
+    private void populateCombo() {
+        DefaultComboBoxModel dm = new DefaultComboBoxModel();
+        dm.addElement("Male");
+        dm.addElement("Female");
+        CbGender.setModel(dm);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -92,12 +121,16 @@ public class NGOJPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         poolTable = new javax.swing.JTable();
         dpPickup = new org.jdesktop.swingx.JXDatePicker();
+        logout2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblCurrentMeetings = new javax.swing.JTable();
         btnAffirm = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         tblHistory = new javax.swing.JTable();
+        username2 = new javax.swing.JLabel();
+        username3 = new javax.swing.JLabel();
+        logout3 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         btnRequest = new javax.swing.JButton();
@@ -106,10 +139,18 @@ public class NGOJPanel extends javax.swing.JPanel {
         txtTrees = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         dpDate = new org.jdesktop.swingx.JXDatePicker();
+        logout4 = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jTabbedPane1.setBackground(new java.awt.Color(0, 51, 51));
+        jTabbedPane1.setForeground(new java.awt.Color(255, 255, 255));
+        jTabbedPane1.setFont(new java.awt.Font("Times New Roman", 2, 18)); // NOI18N
+
+        jPanel1.setBackground(new java.awt.Color(0, 51, 51));
+
         lblName1.setFont(new java.awt.Font("Times New Roman", 2, 14)); // NOI18N
+        lblName1.setForeground(new java.awt.Color(255, 255, 255));
         lblName1.setText("Name:");
 
         txtName.setEnabled(false);
@@ -120,26 +161,31 @@ public class NGOJPanel extends javax.swing.JPanel {
         });
 
         lblName2.setFont(new java.awt.Font("Times New Roman", 2, 14)); // NOI18N
+        lblName2.setForeground(new java.awt.Color(255, 255, 255));
         lblName2.setText("Email:");
 
         txtEmail.setEditable(false);
         txtEmail.setEnabled(false);
 
         lblGender1.setFont(new java.awt.Font("Times New Roman", 2, 14)); // NOI18N
+        lblGender1.setForeground(new java.awt.Color(255, 255, 255));
         lblGender1.setText("Gender:");
 
         CbGender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         CbGender.setEnabled(false);
 
         lblDoB1.setFont(new java.awt.Font("Times New Roman", 2, 14)); // NOI18N
+        lblDoB1.setForeground(new java.awt.Color(255, 255, 255));
         lblDoB1.setText("Date of Birth:");
 
         lblZipcode1.setFont(new java.awt.Font("Times New Roman", 2, 14)); // NOI18N
+        lblZipcode1.setForeground(new java.awt.Color(255, 255, 255));
         lblZipcode1.setText("Zipcode:");
 
         txtZipcode.setEnabled(false);
 
         lblContact1.setFont(new java.awt.Font("Times New Roman", 2, 14)); // NOI18N
+        lblContact1.setForeground(new java.awt.Color(255, 255, 255));
         lblContact1.setText("Contact Number:");
 
         txtContact.setEnabled(false);
@@ -156,10 +202,11 @@ public class NGOJPanel extends javax.swing.JPanel {
         profile.setOpaque(true);
 
         username1.setFont(new java.awt.Font("Times New Roman", 2, 14)); // NOI18N
+        username1.setForeground(new java.awt.Color(255, 255, 255));
         username1.setText("Welcome <username>!");
 
         logout1.setFont(new java.awt.Font("Times New Roman", 2, 14)); // NOI18N
-        logout1.setText("Logout");
+        logout1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/logout.png"))); // NOI18N
         logout1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 logout1MouseClicked(evt);
@@ -183,120 +230,103 @@ public class NGOJPanel extends javax.swing.JPanel {
             }
         });
 
+        dpDoB.setEnabled(false);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(223, 223, 223)
-                .addComponent(dpDoB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(568, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(253, 253, 253)
-                            .addComponent(btnUpdate)
-                            .addGap(111, 111, 111)
-                            .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 548, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                    .addGap(63, 63, 63)
-                                    .addComponent(lblName2)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(54, 54, 54)
-                                        .addComponent(lblGender1)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(CbGender, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addComponent(lblDoB1))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(48, 48, 48)
-                                        .addComponent(lblZipcode1)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtZipcode, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(lblContact1)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtContact, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                    .addGap(62, 62, 62)
-                                    .addComponent(lblName1)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(txtName)))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(username1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(31, 31, 31)
-                                    .addComponent(logout1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(btnProfile)
-                                    .addGap(52, 52, 52)
-                                    .addComponent(profile, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(97, 97, 97)))))
-                    .addContainerGap()))
+                .addGap(62, 62, 62)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblContact1)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblDoB1)
+                            .addComponent(lblGender1)
+                            .addComponent(lblZipcode1)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(lblName1)
+                                .addComponent(lblName2)))
+                        .addGap(50, 50, 50)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtName)
+                            .addComponent(txtZipcode, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtContact, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+                            .addComponent(CbGender, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtEmail)
+                            .addComponent(dpDoB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 171, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnProfile, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(profile, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(211, 211, 211))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(username1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(logout1)
+                .addGap(18, 18, 18))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(314, 314, 314)
+                .addComponent(btnUpdate)
+                .addGap(111, 111, 111)
+                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(281, Short.MAX_VALUE)
-                .addComponent(dpDoB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(272, 272, 272))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(21, 21, 21)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(logout1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(username1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(48, 48, 48)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(profile, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnProfile)))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                            .addGap(98, 98, 98)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(lblName1)
-                                .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(lblName2)
-                                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(33, 33, 33)))
-                    .addGap(2, 2, 2)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblGender1)
-                        .addComponent(CbGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(33, 33, 33)
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(username1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(logout1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblName1))
+                        .addGap(34, 34, 34)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblName2)
+                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblGender1)
+                            .addComponent(CbGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(profile, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDoB1)
-                    .addGap(36, 36, 36)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblZipcode1)
-                        .addComponent(txtZipcode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(40, 40, 40)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblContact1)
-                        .addComponent(txtContact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(85, 85, 85)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnUpdate)
-                        .addComponent(btnSave))
-                    .addContainerGap(44, Short.MAX_VALUE)))
+                    .addComponent(dpDoB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnProfile))
+                .addGap(29, 29, 29)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblZipcode1)
+                    .addComponent(txtZipcode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(32, 32, 32)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblContact1)
+                    .addComponent(txtContact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(71, 71, 71)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnUpdate)
+                    .addComponent(btnSave))
+                .addGap(73, 73, 73))
         );
 
         jTabbedPane1.addTab("Profile", jPanel1);
 
+        jPanel2.setBackground(new java.awt.Color(0, 51, 51));
+
+        jLabel6.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Pickup Date:");
 
+        btnVolunteer.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         btnVolunteer.setText("Volunteer");
         btnVolunteer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -304,6 +334,7 @@ public class NGOJPanel extends javax.swing.JPanel {
             }
         });
 
+        poolTable.setFont(new java.awt.Font("Times New Roman", 0, 11)); // NOI18N
         poolTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -322,6 +353,14 @@ public class NGOJPanel extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(poolTable);
 
+        logout2.setFont(new java.awt.Font("Times New Roman", 2, 14)); // NOI18N
+        logout2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/logout.png"))); // NOI18N
+        logout2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                logout2MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -329,33 +368,46 @@ public class NGOJPanel extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 801, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(44, 858, Short.MAX_VALUE)
+                        .addComponent(logout2))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(177, 177, 177)
-                        .addComponent(jLabel6)
-                        .addGap(168, 168, 168)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnVolunteer)
-                            .addComponent(dpPickup, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(50, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(40, 40, 40)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 801, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(269, 269, 269)
+                                .addComponent(jLabel6)
+                                .addGap(85, 85, 85)
+                                .addComponent(dpPickup, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(390, 390, 390)
+                .addComponent(btnVolunteer)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
+                .addContainerGap()
+                .addComponent(logout2)
+                .addGap(15, 15, 15)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(70, 70, 70)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel6)
-                    .addComponent(dpPickup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dpPickup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addGap(62, 62, 62)
                 .addComponent(btnVolunteer)
                 .addGap(69, 69, 69))
         );
 
         jTabbedPane1.addTab("PoolRequest", jPanel2);
 
+        jPanel3.setBackground(new java.awt.Color(0, 51, 51));
+
+        tblCurrentMeetings.setFont(new java.awt.Font("Times New Roman", 0, 11)); // NOI18N
         tblCurrentMeetings.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
@@ -384,13 +436,15 @@ public class NGOJPanel extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(tblCurrentMeetings);
 
-        btnAffirm.setText("Affirm Plantatin!");
+        btnAffirm.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnAffirm.setText("Affirm Plantation!");
         btnAffirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAffirmActionPerformed(evt);
             }
         });
 
+        tblHistory.setFont(new java.awt.Font("Times New Roman", 0, 11)); // NOI18N
         tblHistory.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
@@ -412,36 +466,79 @@ public class NGOJPanel extends javax.swing.JPanel {
         });
         jScrollPane4.setViewportView(tblHistory);
 
+        username2.setFont(new java.awt.Font("Times New Roman", 2, 14)); // NOI18N
+        username2.setForeground(new java.awt.Color(255, 255, 255));
+        username2.setText("Request History");
+
+        username3.setFont(new java.awt.Font("Times New Roman", 2, 14)); // NOI18N
+        username3.setForeground(new java.awt.Color(255, 255, 255));
+        username3.setText("Upcoming Meetings");
+
+        logout3.setFont(new java.awt.Font("Times New Roman", 2, 14)); // NOI18N
+        logout3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/logout.png"))); // NOI18N
+        logout3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                logout3MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(385, 385, 385)
-                        .addComponent(btnAffirm))
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 843, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 843, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnAffirm)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 843, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 843, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(12, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(username2, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(338, 338, 338))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(logout3)
+                        .addContainerGap())))
+            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                    .addContainerGap(366, Short.MAX_VALUE)
+                    .addComponent(username3, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(344, 344, 344)))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(46, 46, 46)
+                .addContainerGap()
+                .addComponent(logout3)
+                .addGap(32, 32, 32)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
+                .addGap(18, 18, 18)
                 .addComponent(btnAffirm)
-                .addGap(72, 72, 72)
+                .addGap(10, 10, 10)
+                .addComponent(username2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(105, Short.MAX_VALUE))
+                .addContainerGap(97, Short.MAX_VALUE))
+            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addGap(14, 14, 14)
+                    .addComponent(username3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(517, Short.MAX_VALUE)))
         );
 
         jTabbedPane1.addTab("History", jPanel3);
 
+        jPanel4.setBackground(new java.awt.Color(0, 51, 51));
+
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Zipcode:");
 
+        btnRequest.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         btnRequest.setText("Raise Request");
         btnRequest.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -449,39 +546,62 @@ public class NGOJPanel extends javax.swing.JPanel {
             }
         });
 
+        txtZip.setFont(new java.awt.Font("Times New Roman", 0, 11)); // NOI18N
+
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Number of trees(Approx.):");
 
+        txtTrees.setFont(new java.awt.Font("Times New Roman", 0, 11)); // NOI18N
+
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Date:");
+
+        logout4.setFont(new java.awt.Font("Times New Roman", 2, 14)); // NOI18N
+        logout4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/logout.png"))); // NOI18N
+        logout4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                logout4MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnRequest)
-                .addGap(389, 389, 389))
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(294, 294, 294)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(dpDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(107, 107, 107)
-                        .addComponent(txtTrees, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel2))
+                        .addGap(84, 84, 84))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtZip, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(263, Short.MAX_VALUE))
+                        .addGap(171, 171, 171)))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtZip, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTrees, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dpDate, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(235, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(btnRequest)
+                        .addGap(389, 389, 389))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(logout4)
+                        .addContainerGap())))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(103, 103, 103)
+                .addContainerGap()
+                .addComponent(logout4)
+                .addGap(66, 66, 66)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtZip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -495,7 +615,7 @@ public class NGOJPanel extends javax.swing.JPanel {
                     .addComponent(dpDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(81, 81, 81)
                 .addComponent(btnRequest)
-                .addContainerGap(241, Short.MAX_VALUE))
+                .addContainerGap(235, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Plantation", jPanel4);
@@ -507,17 +627,18 @@ public class NGOJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         JFileChooser jFC = new JFileChooser();
         FileFilter imageFilter = new FileNameExtensionFilter(
-            "Image files", ImageIO.getReaderFileSuffixes());
+                "Image files", ImageIO.getReaderFileSuffixes());
         jFC.setFileFilter(imageFilter);
         int chosenFile = jFC.showOpenDialog(null);
         if (chosenFile == JFileChooser.APPROVE_OPTION) {
             File file = jFC.getSelectedFile();
             try {
                 BufferedImage img = null;
-                user.setProfilePicture(file);
+                user.setProfilePicture(file.getAbsolutePath());
+                System.out.println(file.getAbsolutePath());
                 img = ImageIO.read(file);
                 Image resizedImg = img.getScaledInstance(80,
-                    60, Image.SCALE_SMOOTH);
+                        60, Image.SCALE_SMOOTH);
                 profile.setIcon(new ImageIcon(resizedImg));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -548,12 +669,31 @@ public class NGOJPanel extends javax.swing.JPanel {
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
 
-        user.setName(txtName.toString());
-        user.setGender(CbGender.toString());
-        user.setContactNumber(txtContact.toString());
-        user.setZip(txtZipcode.toString());
+        user.setName(txtName.getText());
+        user.setGender((String) CbGender.getSelectedItem());
+        user.setContactNumber(txtContact.getText());
+        user.setZip(txtZipcode.getText());
         user.setDateOfBirth(dpDoB.getDate());
+        try {
+            int num = Integer.parseInt(txtContact.getText());
+            int zip = Integer.parseInt(txtZipcode.getText());
 
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Enter valid Numbers!", "Error", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        if (txtName.getText() == null || txtName.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Enter Valid Name!", "Error", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        if (new Date().compareTo(dpDoB.getDate()) < 0) {
+            JOptionPane.showMessageDialog(null, "Enter Valid DOB!", "Error", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        if (user.getContactNumber() != null && user.getZip() != null && user.getDateOfBirth() != null && user.getProfilePicture() != null) {
+            user.setCompleteProfile(true);
+        }
         txtName.setEnabled(false);
         txtZipcode.setEnabled(false);
         txtContact.setEnabled(false);
@@ -562,6 +702,8 @@ public class NGOJPanel extends javax.swing.JPanel {
         dpDoB.setEnabled(false);
         btnSave.setEnabled(false);
         btnUpdate.setEnabled(true);
+
+        dB4OUtil.storeSystem(system);
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
@@ -570,9 +712,11 @@ public class NGOJPanel extends javax.swing.JPanel {
 
     private void btnVolunteerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolunteerActionPerformed
         // TODO add your handling code here:
-
+        if (user.isCompleteProfile() == false) {
+            JOptionPane.showMessageDialog(null, "Please complete your profile first", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         int selectedRow = poolTable.getSelectedRow();
-
         if (selectedRow < 0) {
             JOptionPane.showMessageDialog(null, "Please select a row!");
             return;
@@ -580,8 +724,8 @@ public class NGOJPanel extends javax.swing.JPanel {
         PlantationWorkRequest request = (PlantationWorkRequest) poolTable.getValueAt(selectedRow, 0);
         //        int treeCount = Integer.parseInt(txtNum.getSelectedItem().toString());
         //        if(treeCount !=request.getTreeCount()){
-            //            request.setTreeCount(request.getTreeCount()-treeCount);
-            //        }
+        //            request.setTreeCount(request.getTreeCount()-treeCount);
+        //        }
         request.setUser(user);
         request.setStatus("Assigned to " + user.getName());
         request.setPickup(dpPickup.getDate());
@@ -604,15 +748,17 @@ public class NGOJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "No organization present", "Error", JOptionPane.ERROR_MESSAGE);
         }
         populatePoolTable();
+
+        dB4OUtil.storeSystem(system);
     }//GEN-LAST:event_btnVolunteerActionPerformed
 
-     public void populatePoolTable() {
+    public void populatePoolTable() {
         DefaultTableModel dtm = (DefaultTableModel) poolTable.getModel();
         dtm.setRowCount(0);
 
-         System.out.println(user.getNetwork().getPoolWorkQueue().getPoolList());
+        System.out.println(user.getNetwork().getPoolWorkQueue().getPoolList());
         for (PlantationWorkRequest request : user.getNetwork().getPoolWorkQueue().getPoolList()) {
-            if (request.getUser()== null) {
+            if (request.getUser() == null) {
                 System.out.println("inside pool loop");
                 Object row[] = new Object[7];
                 row[0] = request;
@@ -626,14 +772,14 @@ public class NGOJPanel extends javax.swing.JPanel {
             }
         }
     }
-    
-     public void populateMeetingTable() {
+
+    public void populateMeetingTable() {
         DefaultTableModel dtm = (DefaultTableModel) tblCurrentMeetings.getModel();
         dtm.setRowCount(0);
 
         for (PlantationWorkRequest request : user.getNetwork().getPoolWorkQueue().getPoolList()) {
             if (request.getStatus().equals("Plantation in progress")) {
-                System.out.println("inside meeting loop");
+                System.out.println("inside meeting");
                 Object row[] = new Object[6];
                 row[0] = request.getCoordinatorAssigned().getName();
                 row[1] = request;
@@ -646,30 +792,32 @@ public class NGOJPanel extends javax.swing.JPanel {
         }
         for (SocialWorkRequest request : user.getNetwork().getPoolWorkQueue().getSocialList()) {
             if (!request.getStatus().equals("completed")) {
-                System.out.println("inside social  meeting loop");
+                System.out.println("inside social loop");
                 Object row[] = new Object[6];
-                if(request.getManager()==null)
+                if (request.getManager() == null) {
                     row[0] = "unassigned";
-                else
+                } else {
                     row[0] = request.getManager().getName();
+                }
                 row[1] = request;
                 row[2] = request.getTreeCount();
-                if(request.getCareTaker()==null)
+                if (request.getCareTaker() == null) {
                     row[3] = "unassigned";
-                else
+                } else {
                     row[3] = request.getCareTaker().getName();
+                }
                 row[4] = request.getStatus();
                 row[5] = request.getType();
                 dtm.addRow(row);
             }
         }
     }
-     
-      public void populateHistoryTable() {
+
+    public void populateHistoryTable() {
         DefaultTableModel dtm = (DefaultTableModel) tblHistory.getModel();
         dtm.setRowCount(0);
 
-        for (PlantationWorkRequest request : user.getNetwork().getPoolWorkQueue().getPoolList()) {
+        for (PlantationWorkRequest request : user.getPlantationRequestList()) {
             if (request.getOverallStatus().equals("completed")) {
                 System.out.println("inside pool loop");
                 Object row[] = new Object[6];
@@ -682,7 +830,7 @@ public class NGOJPanel extends javax.swing.JPanel {
                 dtm.addRow(row);
             }
         }
-        for (SocialWorkRequest request : user.getNetwork().getPoolWorkQueue().getSocialList()) {
+        for (SocialWorkRequest request : user.getSocialRequestList()) {
             if (request.getOverallStatus().equals("completed")) {
                 System.out.println("inside social  meeting loop");
                 Object row[] = new Object[6];
@@ -696,43 +844,83 @@ public class NGOJPanel extends javax.swing.JPanel {
             }
         }
     }
-      
+
     private void btnRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRequestActionPerformed
         // TODO add your handling code here:
+        if (user.isCompleteProfile() == false) {
+            JOptionPane.showMessageDialog(null, "Please complete your profile first", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int tree = 0;
+        try {
+            int zip = Integer.parseInt(txtZip.getText());
+            tree = Integer.parseInt(txtTrees.getText());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Please enter valid numbers", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         SocialWorkRequest request = new SocialWorkRequest();
         request.setDate(dpDate.getDate());
         request.setOrg(organization);
+        request.setUser(user);
         request.setStatus("Request Raised.");
-        request.setTreeCount(Integer.parseInt(txtTrees.getText().toString()));
+        request.setOverallStatus("initiated");
+        request.setTreeCount(tree);
         request.setZipcode(txtZip.getText());
         request.setType("Social Work");
         user.addSocialRequest(request);
-        
-        Organization org=null;
-        for(Enterprise e: user.getNetwork().getEnterpriseDirectory().getEnterpriseList()){
-            for(Organization o: e.getOrganizationDirectory().getOrganizationList()){
-                if(o instanceof HeadquatersOrganization){
+
+        Organization org = null;
+        for (Enterprise e : user.getNetwork().getEnterpriseDirectory().getEnterpriseList()) {
+            for (Organization o : e.getOrganizationDirectory().getOrganizationList()) {
+                if (o instanceof HeadquatersOrganization) {
                     org = o;
                     break;
                 }
             }
         }
         if (org != null) {
-                System.out.println(org.getClass());
-                org.getWorkQueue().getSocialList().add(request);
-                user.addSocialRequest(request);
-                JOptionPane.showMessageDialog(null, "Request Sent Successfully", "Info", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(null, "No organization present", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+            System.out.println(org.getClass());
+            org.getWorkQueue().getSocialList().add(request);
+            JOptionPane.showMessageDialog(null, "Request Sent Successfully", "Info", JOptionPane.INFORMATION_MESSAGE);
+
+        } else {
+            JOptionPane.showMessageDialog(null, "No organization present", "Error", JOptionPane.ERROR_MESSAGE);
+        }
         txtZip.setText("");
         txtTrees.setText("");
         populateMeetingTable();
+
+        dB4OUtil.storeSystem(system);
     }//GEN-LAST:event_btnRequestActionPerformed
+
+    private void logout2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logout2MouseClicked
+        // TODO add your handling code here:
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        userProcessContainer.remove(this);
+        layout.previous(userProcessContainer);
+    }//GEN-LAST:event_logout2MouseClicked
+
+    private void logout3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logout3MouseClicked
+        // TODO add your handling code here:
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        userProcessContainer.remove(this);
+        layout.previous(userProcessContainer);
+    }//GEN-LAST:event_logout3MouseClicked
+
+    private void logout4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logout4MouseClicked
+        // TODO add your handling code here:
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        userProcessContainer.remove(this);
+        layout.previous(userProcessContainer);
+    }//GEN-LAST:event_logout4MouseClicked
 
     private void btnAffirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAffirmActionPerformed
         // TODO add your handling code here:
-
+        if (user.isCompleteProfile() == false) {
+            JOptionPane.showMessageDialog(null, "Please complete your profile first", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         int selectedRow = tblCurrentMeetings.getSelectedRow();
 
         if (selectedRow < 0) {
@@ -747,19 +935,24 @@ public class NGOJPanel extends javax.swing.JPanel {
         NotificationRequest notify = new NotificationRequest();
         notify.setHeadquaterManager(request.getCoordinatorAssigned());
         notify.setInformer(request.getUser());
-        notify.setStatus("In pool");
+        notify.setStatus("Pantation");
         notify.setTreeCount(request.getTreeCount());
         notify.setType("Plantation");
         notify.setZipcode(request.getZipcode());
 
-        for(Enterprise e : user.getNetwork().getEnterpriseDirectory().getEnterpriseList()){
-            if(e instanceof GovernmentEnterprise){
-                for(Organization o: e.getOrganizationDirectory().getOrganizationList()){
+        for (Enterprise e : user.getNetwork().getEnterpriseDirectory().getEnterpriseList()) {
+            if (e instanceof GovernmentEnterprise) {
+                for (Organization o : e.getOrganizationDirectory().getOrganizationList()) {
                     o.getWorkQueue().getNotificationList().add(notify);
+                    System.out.println(o.getName() + o.getWorkQueue().getNotificationList().size());
                     break;
                 }
             }
         }
+        populateMeetingTable();
+        populateHistoryTable();
+
+        dB4OUtil.storeSystem(system);
     }//GEN-LAST:event_btnAffirmActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -792,6 +985,9 @@ public class NGOJPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblName2;
     private javax.swing.JLabel lblZipcode1;
     private javax.swing.JLabel logout1;
+    private javax.swing.JLabel logout2;
+    private javax.swing.JLabel logout3;
+    private javax.swing.JLabel logout4;
     private javax.swing.JTable poolTable;
     private javax.swing.JLabel profile;
     private javax.swing.JTable tblCurrentMeetings;
@@ -803,5 +999,7 @@ public class NGOJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtZip;
     private javax.swing.JTextField txtZipcode;
     private javax.swing.JLabel username1;
+    private javax.swing.JLabel username2;
+    private javax.swing.JLabel username3;
     // End of variables declaration//GEN-END:variables
 }

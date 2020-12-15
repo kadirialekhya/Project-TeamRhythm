@@ -15,14 +15,14 @@ import Business.User.User;
 
 public class InternalWorkRequest extends WorkRequest{
     
-    private double totalBill;
+    private int totalBill;
     private Employee emp;
 
     public double getTotalBill() {
         return totalBill;
     }
 
-    public void setTotalBill(double totalBill) {
+    public void setTotalBill(int totalBill) {
         this.totalBill = totalBill;
     }
 

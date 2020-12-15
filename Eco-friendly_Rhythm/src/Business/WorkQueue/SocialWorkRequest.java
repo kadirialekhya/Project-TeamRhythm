@@ -10,8 +10,9 @@ import Business.Organization.Organization;
 import java.util.Date;
 
 /**
- *
- * @author Am3y
+ * @author Alekhya
+ * @author Apeksha
+ * @author Shalini
  */
 public class SocialWorkRequest extends WorkRequest{
     

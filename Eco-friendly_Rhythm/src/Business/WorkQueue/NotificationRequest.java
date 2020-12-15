@@ -8,9 +8,11 @@ package Business.WorkQueue;
 import Business.Employee.Employee;
 import Business.User.User;
 
+
 /**
- *
- * @author Am3y
+ * @author Alekhya
+ * @author Apeksha
+ * @author Shalini
  */
 public class NotificationRequest {
     
